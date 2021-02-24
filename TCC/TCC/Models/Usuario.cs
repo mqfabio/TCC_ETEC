@@ -22,7 +22,15 @@ namespace TCC.Models
 
         public Usuario()
         {
+
         }
+
+        //public Usuario(string senha, string perfil, string nome)
+        //{
+        //    Senha = senha;
+        //    Perfil = perfil;
+        //    Nome = nome;
+        //}
 
         public async Task<bool> CadastrarAsync(Usuario usuario)
         {

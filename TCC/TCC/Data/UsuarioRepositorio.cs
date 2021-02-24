@@ -15,7 +15,7 @@ namespace TCC.Data
             {
                 using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC;Trusted_Connection=True;"))
                 {
-                    var query = @"INSERT INTO [dbo].[Usuarios]
+                    var query = @"INSERT INTO [dbo].[usuarios]
                                    (Rm ,Senha ,Perfil ,Nome)
                              VALUES
                                    (@Rm, @Senha, @Perfil, @Nome)";
