@@ -41,8 +41,6 @@ namespace TCC.Controllers
             {
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro inesperado. Entre em contato com o administrador.");
             }
-            
-
 
             throw new NotImplementedException();
         }
@@ -53,10 +51,28 @@ namespace TCC.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> ExcluirAsycn([Required] int idEvento)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> ExcluirAsycn(int id)
         {
+            var resultado = await _evento.ExcluirAsync(id);
+            try
+            {
+                if (resultado)
+                {
+                    return StatusCode(HttpStatusCode.OK.GetHashCode());
+                }
+
+                else
+                {
+                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+            }
             throw new NotImplementedException();
         }
+        
     }
 }

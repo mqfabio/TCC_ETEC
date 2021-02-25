@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TCC.Data;
 
@@ -51,6 +52,7 @@ namespace TCC.Models
 
         public async Task<bool> ExcluirAsync(int idEvento)
         {
+            var resultado = await _eventoRepositorio.DeletarAsync(idEvento);
             return true;
         }
     }
@@ -62,6 +64,7 @@ namespace TCC.Models
         Task<bool> CadastrarAsync(Evento evento);
         Task<bool> AlterarAsync(Evento evento);
         Task<bool> ExcluirAsync(int idEvento);
+ 
 
 
         //IEnumerable<Evento> ConsultarInformacoes();
