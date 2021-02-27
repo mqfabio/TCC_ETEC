@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TCC.Data;
 
@@ -11,9 +12,13 @@ namespace TCC.Models
         public int IdServidor { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
-        public DateTime Data_Evento { get; set; }
+        public string Data_Evento { get; set; }
         public string StatusEvento { get; set; }
-        public DateTime Hora { get; set; }
+        [JsonIgnore]
+        public DateTime HoraDb { get; set; }
+
+        public string Hora { get => HoraDb.ToString("HH:mm"); }
+
 
 
         private readonly IEventoRepositorio _eventoRepositorio;
@@ -28,14 +33,14 @@ namespace TCC.Models
         {
 
         }
-        public Evento(int idServidor, string nome, string descricao, DateTime data_evento, string statusEvento, DateTime hora)
+        public Evento(int idServidor, string nome, string descricao, string data_evento, string statusEvento)
         {
             IdServidor = idServidor;
             Nome = nome;
             Descricao = descricao;
             Data_Evento = data_evento;
             StatusEvento = statusEvento;
-            Hora = hora;
+            
         }
 
         public async Task<bool> CadastrarAsync(Evento evento)
@@ -53,7 +58,19 @@ namespace TCC.Models
         public async Task<bool> ExcluirAsync(int idEvento)
         {
             var resultado = await _eventoRepositorio.DeletarAsync(idEvento);
-            return true;
+            return resultado;
+        }
+
+        public async Task<Evento> PegarPeloId(int id)
+        {
+            var resultado = await _eventoRepositorio.BuscarPorId(id);
+            return resultado;
+        }
+
+        public async Task<IEnumerable<Evento>> BuscarTodos()
+        {
+            var resultado = await _eventoRepositorio.BuscarTodos();
+            return resultado;
         }
     }
 
@@ -64,7 +81,9 @@ namespace TCC.Models
         Task<bool> CadastrarAsync(Evento evento);
         Task<bool> AlterarAsync(Evento evento);
         Task<bool> ExcluirAsync(int idEvento);
- 
+        Task<Evento> PegarPeloId(int id);
+        Task<IEnumerable<Evento>> BuscarTodos();
+
 
 
         //IEnumerable<Evento> ConsultarInformacoes();

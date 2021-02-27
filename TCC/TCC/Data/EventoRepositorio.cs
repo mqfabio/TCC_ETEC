@@ -5,6 +5,7 @@ using Dapper;
 using System.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TCC.Data
 {
@@ -60,11 +61,54 @@ namespace TCC.Data
             
         }
 
+        public async Task<Evento> BuscarPorId(int id)
+        {
+            try
+            {
+                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC;Trusted_Connection=True;"))
+                {
+                    var query = @"select  idEvento, idServidor, nome,descricao,data_evento, Convert(DATETIME, hora) As HoraDb from evento Where idEvento = @id";
+
+                    var param = new { id = id };
+                    conexao.Open();
+                    var resultado = await conexao.QueryAsync<Evento>(query, param);
+
+                    return resultado.FirstOrDefault();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public async Task<IEnumerable<Evento>> BuscarTodos()
+        {
+            try
+            {
+                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC;Trusted_Connection=True;"))
+                {
+                    var query = @"select idEvento, idServidor, nome, descricao, data_evento, Convert(DATETIME, hora) As HoraDb from evento ";
+
+                    var resultado = await conexao.QueryAsync<Evento>(query);
+
+                    return resultado;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
     public interface IEventoRepositorio
     {
         Task<bool> CadastrarAsync(Evento evento);
 
         Task<bool> DeletarAsync(int id);
+
+        Task<Evento> BuscarPorId(int id);
+
+        Task<IEnumerable<Evento>> BuscarTodos();
     }
 }

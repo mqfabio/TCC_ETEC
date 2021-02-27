@@ -73,6 +73,47 @@ namespace TCC.Controllers
             }
             throw new NotImplementedException();
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> PegarPeloId(int id)
+        {
+            var resultado = await _evento.PegarPeloId(id);
+            try
+            {
+                if (resultado != null)
+                {
+                    return Ok(resultado);
+                }
+
+                else
+                {
+                    return BadRequest("Insira um id valido");
+                }
+            }
+            catch (Exception ex)
+            {
+                return  StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+            }
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BuscarTodos()
+        {
+            var resultado = await _evento.BuscarTodos();
+            try
+            {
+                if (resultado != null)
+                    return Ok(resultado);
+
+                else
+                    return BadRequest();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
         
     }
 }
