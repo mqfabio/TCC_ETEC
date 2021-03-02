@@ -13,12 +13,12 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC;Trusted_Connection=True;"))
+                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
                 {
-                    var query = @"INSERT INTO [dbo].[usuarios]
-                                   (Rm ,Senha ,Perfil ,Nome)
+                    var query = @"INSERT INTO [dbo].[usuario] 
+                                   (senha ,perfil ,nome)
                              VALUES
-                                   (@Rm, @Senha, @Perfil, @Nome)";
+                                   (@senha, @perfil, @nome)";
 
                     var resultado = await conexao.ExecuteAsync(query, usuario, commandType: CommandType.Text);
 

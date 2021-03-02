@@ -9,15 +9,17 @@ namespace TCC.Models
     public class Evento : IEvento
     {
         public int IdEvento { get; set; }
-        public int IdServidor { get; set; }
+        //public int IdServidor { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public DateTime Data_Evento { get; set; }
-        public string StatusEvento { get; set; }
         [JsonIgnore]
         public DateTime HoraDb { get; set; }
 
         public string Hora { get => HoraDb.ToString("HH:mm"); }
+        public string NomeServidor { get; set; }
+        public string RG { get; set; }
+        public string StatusEvento { get; set; }
 
 
 
@@ -33,13 +35,15 @@ namespace TCC.Models
         {
 
         }
-        public Evento(int idServidor, string nome, string descricao, DateTime data_evento, string statusEvento)
+        public Evento(string nome, string descricao, DateTime data_evento, string nomeServidor, string rg,string statusEvento)
         {
-            IdServidor = idServidor;
+            
             Nome = nome;
             Descricao = descricao;
             Data_Evento = data_evento;
             StatusEvento = statusEvento;
+            NomeServidor = nomeServidor;
+            RG = rg;
             
         }
 

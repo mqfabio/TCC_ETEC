@@ -15,12 +15,12 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC;Trusted_Connection=True;"))
+                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
                 {
                     var query = @"INSERT INTO [dbo].[evento]
-                                (idServidor ,nome ,descricao ,data_evento ,hora ,statusEvento)
+                                ( nome ,descricao ,data_evento ,hora ,nomeServidor, RG, statusEvento)
                             Values
-                                (@IdServidor, @Nome, @Descricao, @Data_Evento, @hora, @StatusEvento)";
+                                (@Nome, @Descricao, @Data_Evento, @hora, @nomeServidor, @RG, @StatusEvento)";
 
                     var resultado = await conexao.ExecuteAsync(query, evento, commandType: CommandType.Text);
 
@@ -38,10 +38,10 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC;Trusted_Connection=True;"))
+                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
                 {
                     var query = @"UPDATE [dbo].[evento] set
-                                idServidor = @idServidor ,nome = @nome ,descricao = @descricao, data_evento = @data_evento ,hora = Convert(Time, @hora),statusEvento = @statusEvento
+                                nome = @nome ,descricao = @descricao, data_evento = @data_evento ,hora = Convert(Time, @hora), nomeServidor = @nomeServidor, RG = @RG ,statusEvento = @statusEvento
                             WHERE idEvento = @idEvento";
 
                     var resultado = await conexao.ExecuteAsync(query, evento, commandType: CommandType.Text);
@@ -59,7 +59,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC;Trusted_Connection=True;"))
+                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
                 {
                     var param = new { id = id };
 
@@ -81,9 +81,9 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC;Trusted_Connection=True;"))
+                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
                 {
-                    var query = @"select  idEvento, idServidor, nome,descricao,data_evento, Convert(DATETIME, hora) As HoraDb from evento Where idEvento = @id";
+                    var query = @"select  idEvento, nome,descricao,data_evento, Convert(DATETIME, hora) As HoraDb, nomeServidor, RG, statusEvento from evento Where idEvento = @id";
 
                     var param = new { id = id };
                     conexao.Open();
@@ -102,10 +102,9 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC;Trusted_Connection=True;"))
+                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
                 {
-                    var query = @"select idEvento, idServidor, nome, descricao, data_evento, Convert(DATETIME, hora) As HoraDb from evento ";
-
+                    var query = @"select  idEvento, nome,descricao,data_evento, Convert(DATETIME, hora) As HoraDb, nomeServidor, RG, statusEvento from evento";
                     var resultado = await conexao.QueryAsync<Evento>(query);
 
                     return resultado;
