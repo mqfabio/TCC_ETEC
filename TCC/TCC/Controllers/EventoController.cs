@@ -48,6 +48,24 @@ namespace TCC.Controllers
         [HttpPut]
         public async Task<IActionResult> AlterarAsycn([Required][FromBody] Evento evento)
         {
+            var resultado = await _evento.AlterarAsync(evento);
+            try
+            {
+                if (resultado)
+                {
+                    return StatusCode(HttpStatusCode.Created.GetHashCode());
+                }
+
+                else
+                {
+                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
             throw new NotImplementedException();
         }
 
@@ -92,7 +110,7 @@ namespace TCC.Controllers
             }
             catch (Exception ex)
             {
-                return  StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
             }
             throw new NotImplementedException();
         }
@@ -114,6 +132,7 @@ namespace TCC.Controllers
                 throw new Exception(e.Message);
             }
         }
-        
+
+      
     }
 }

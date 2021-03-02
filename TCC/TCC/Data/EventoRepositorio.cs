@@ -36,7 +36,23 @@ namespace TCC.Data
 
         public async Task<bool> AlterarAsync(Evento evento)
         {
-            return true;
+            try
+            {
+                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC;Trusted_Connection=True;"))
+                {
+                    var query = @"UPDATE [dbo].[evento] set
+                                idServidor = @idServidor ,nome = @nome ,descricao = @descricao, data_evento = @data_evento ,hora = Convert(Time, @hora),statusEvento = @statusEvento
+                            WHERE idEvento = @idEvento";
+
+                    var resultado = await conexao.ExecuteAsync(query, evento, commandType: CommandType.Text);
+
+                    return resultado == 1;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<bool> DeletarAsync(int id)
@@ -110,5 +126,13 @@ namespace TCC.Data
         Task<Evento> BuscarPorId(int id);
 
         Task<IEnumerable<Evento>> BuscarTodos();
+
+        Task<bool> AlterarAsync(Evento evento);
+
+
+
+        //@"UPDATE [dbo].[evento] set
+        //                        idServidor = @idServidor ,nome = @nome ,descricao = @descricao, data_evento = @data_evento ,hora = Convert(Time, @hora),statusEvento = @statusEvento
+        //                    WHERE idEvento = @idEvento";
     }
 }

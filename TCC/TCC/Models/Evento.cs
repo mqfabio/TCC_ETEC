@@ -12,7 +12,7 @@ namespace TCC.Models
         public int IdServidor { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
-        public string Data_Evento { get; set; }
+        public DateTime Data_Evento { get; set; }
         public string StatusEvento { get; set; }
         [JsonIgnore]
         public DateTime HoraDb { get; set; }
@@ -33,7 +33,7 @@ namespace TCC.Models
         {
 
         }
-        public Evento(int idServidor, string nome, string descricao, string data_evento, string statusEvento)
+        public Evento(int idServidor, string nome, string descricao, DateTime data_evento, string statusEvento)
         {
             IdServidor = idServidor;
             Nome = nome;
@@ -52,7 +52,8 @@ namespace TCC.Models
 
         public async Task<bool> AlterarAsync(Evento evento)
         {
-            return true;
+            var resultado = await _eventoRepositorio.AlterarAsync(evento);
+            return resultado;
         }
 
         public async Task<bool> ExcluirAsync(int idEvento)
