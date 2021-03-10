@@ -28,6 +28,7 @@ namespace TCC
             services.AddSingleton<IEventoRepositorio, EventoRepositorio>();
             services.AddSingleton<IServidor, Servidor>();
             services.AddSingleton<IServidorRepositorio, ServidorRepositorio>();
+            
 
             services.AddSwaggerGen(config => {
                 config.SwaggerDoc("v1", new OpenApiInfo

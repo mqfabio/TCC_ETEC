@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TCC.Data;
 
 namespace TCC.Models
@@ -22,16 +23,17 @@ namespace TCC.Models
 
         }
 
-        //public Usuario(string senha, string perfil, string nome)
-        //{
-        //    Senha = senha;
-        //    Perfil = perfil;
-        //    Nome = nome;
-        //}
 
         public async Task<bool> CadastrarAsync(Usuario usuario)
         {
             var resultado = await _usuarioRepositorio.CadastrarAsync(usuario);
+
+            return resultado;
+        }
+
+        public async Task<IEnumerable<Usuario>> BuscarTodos()
+        {
+            var resultado = await _usuarioRepositorio.BuscarTodos();
 
             return resultado;
         }
@@ -40,6 +42,7 @@ namespace TCC.Models
     public interface IUsuario
     {
         Task<bool> CadastrarAsync(Usuario usuario);
+        Task<IEnumerable<Usuario>> BuscarTodos();
     }
 
 }

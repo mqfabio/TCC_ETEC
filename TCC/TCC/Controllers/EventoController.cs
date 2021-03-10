@@ -63,7 +63,7 @@ namespace TCC.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                throw new NotImplementedException();
             }
 
             throw new NotImplementedException();
@@ -132,7 +132,5 @@ namespace TCC.Controllers
                 throw new Exception(e.Message);
             }
         }
-
-      
     }
 }

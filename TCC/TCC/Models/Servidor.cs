@@ -5,9 +5,11 @@ namespace TCC.Models
 {
     public class Servidor : IServidor
     {
+        
+
         public int IdServidor { get; set; }
         public int CodUE { get; set; }
-        public int Usuario_RM { get; set; }
+        public int RM { get; set; }
         public string Cpf { get; set; }
         public string Rg { get; set; }
         public DateTime DataNascimento { get; set; }
@@ -16,14 +18,27 @@ namespace TCC.Models
         public string Cargo { get; set; }
         public string StatusServidor { get; set; }
 
-        public Task<bool> AlterarAsync(Servidor servidor)
+        public Servidor()
         {
-            throw new NotImplementedException();
         }
 
-        public Task<bool> CadastrarAsync(Servidor servidor)
+
+        private readonly IServidorRepositorio _servidorRepositorio;
+        public Servidor(IServidorRepositorio servidorRepositorio)
         {
-            throw new NotImplementedException();
+            _servidorRepositorio = servidorRepositorio;
+        }
+
+        //public async Task<bool> AlterarAsync(Servidor servidor)
+        //{
+        //    var resultado = await _servidorRepositorio.AlterarAsync(servidor);
+        //    return resultado;
+        //}
+
+        public async Task<bool> CadastrarAsync(Servidor servidor)
+        {
+            var resultado = await _servidorRepositorio.CdastrarAsync(servidor);
+            return resultado;
         }
 
         public Task<bool> InativarAsync(int idServidor)
@@ -35,7 +50,7 @@ namespace TCC.Models
     public interface IServidor
     {
         Task<bool> CadastrarAsync(Servidor servidor);
-        Task<bool> AlterarAsync(Servidor servidor);
+        //Task<bool> AlterarAsync(Servidor servidor);
         Task<bool> InativarAsync(int idServidor);
     }
 }
