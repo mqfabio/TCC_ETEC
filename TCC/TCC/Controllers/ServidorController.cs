@@ -60,6 +60,28 @@ namespace TCC.Controllers
             }
             throw new NotImplementedException();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> BuscartodosASync()
+        {
+            var resultado = await _servidor.BuscarTodosAsync();
+            try
+            {
+                if(resultado != null)
+                {
+                    return Ok(resultado);
+                }
+
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
    
 }

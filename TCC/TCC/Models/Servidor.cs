@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace TCC.Models
@@ -45,6 +46,12 @@ namespace TCC.Models
         {
             throw new NotImplementedException();
         }
+
+        public async Task<IEnumerable<Servidor>> BuscarTodosAsync()
+        {
+            var resultado = await _servidorRepositorio.BuscarTodosAsync();
+            return resultado;
+        }
     }
 
     public interface IServidor
@@ -52,5 +59,6 @@ namespace TCC.Models
         Task<bool> CadastrarAsync(Servidor servidor);
         //Task<bool> AlterarAsync(Servidor servidor);
         Task<bool> InativarAsync(int idServidor);
+        Task<IEnumerable<Servidor>> BuscarTodosAsync();
     }
 }
