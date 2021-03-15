@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TCC.Data;
+using TCC.Enums;
 
 namespace TCC.Models
 {
@@ -20,6 +21,8 @@ namespace TCC.Models
         public string NomeServidor { get; set; }
         public string RG { get; set; }
         public string StatusEvento { get; set; }
+
+       
 
 
 
@@ -66,9 +69,9 @@ namespace TCC.Models
             return resultado;
         }
 
-        public async Task<Evento> PegarPeloId(int id)
+        public async Task<Evento> PegarPeloNome(string nome)
         {
-            var resultado = await _eventoRepositorio.BuscarPorId(id);
+            var resultado = await _eventoRepositorio.BuscarPorNome(nome);
             return resultado;
         }
 
@@ -86,7 +89,7 @@ namespace TCC.Models
         Task<bool> CadastrarAsync(Evento evento);
         Task<bool> AlterarAsync(Evento evento);
         Task<bool> ExcluirAsync(int idEvento);
-        Task<Evento> PegarPeloId(int id);
+        Task<Evento> PegarPeloNome(string nome);
         Task<IEnumerable<Evento>> BuscarTodos();
 
 

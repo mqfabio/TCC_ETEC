@@ -77,15 +77,15 @@ namespace TCC.Data
             
         }
 
-        public async Task<Evento> BuscarPorId(int id)
+        public async Task<Evento> BuscarPorNome(string nome)
         {
             try
             {
                 using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
                 {
-                    var query = @"select  idEvento, nome,descricao,data_evento, Convert(DATETIME, hora) As HoraDb, nomeServidor, RG, statusEvento from evento Where idEvento = @id";
+                    var query = @"select  idEvento, nome,descricao,data_evento, Convert(DATETIME, hora) As HoraDb, nomeServidor, RG, statusEvento from evento Where Nome = @nome";
 
-                    var param = new { id = id };
+                    var param = new { nome = nome };
                     conexao.Open();
                     var resultado = await conexao.QueryAsync<Evento>(query, param);
 
@@ -112,7 +112,7 @@ namespace TCC.Data
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                throw   new Exception(e.Message);
             }
         }
     }
@@ -122,7 +122,7 @@ namespace TCC.Data
 
         Task<bool> DeletarAsync(int id);
 
-        Task<Evento> BuscarPorId(int id);
+        Task<Evento> BuscarPorNome(string nome);
 
         Task<IEnumerable<Evento>> BuscarTodos();
 

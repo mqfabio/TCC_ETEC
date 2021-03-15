@@ -1,48 +1,67 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using TCC.Data;
+using TCC.Enums;
 
 namespace TCC.Models
 {
     public class Usuario : IUsuario
     {
-        public int Rm { get; set; }
+        
+
+        public int IdUsuario { get; set; }
         public string Senha { get; set; }
-        public string Perfil { get; set; }
-        public string Nome { get; set; }
-
-        private readonly IUsuarioRepositorio _usuarioRepositorio;
-
-        public Usuario(IUsuarioRepositorio usuarioRepositorio)
-        {
-            _usuarioRepositorio = usuarioRepositorio;
-        }
+        public int CodUE { get; set; }
+        public int RM { get; set; }
+        public string Cpf { get; set; }
+        public string Rg { get; set; }
+        public DateTime DataNascimento { get; set; }
+        public string NomeUsuario { get; set; }
+        public string Email { get; set; }
+        public string Cargo { get; set; }
+        public string StatusServidor { get; set; }
+        public TipoPerfil Perfil { get; set; }
 
         public Usuario()
         {
-
         }
 
 
-        public async Task<bool> CadastrarAsync(Usuario usuario)
+        private readonly IUsuarioRepositorio _servidorRepositorio;
+        public Usuario(IUsuarioRepositorio servidorRepositorio)
         {
-            var resultado = await _usuarioRepositorio.CadastrarAsync(usuario);
+            _servidorRepositorio = servidorRepositorio;
+        }
 
+        //public async Task<bool> AlterarAsync(Servidor servidor)
+        //{
+        //    var resultado = await _servidorRepositorio.AlterarAsync(servidor);
+        //    return resultado;
+        //}
+
+        public async Task<bool> CadastrarAsync(Usuario servidor)
+        {
+            var resultado = await _servidorRepositorio.CdastrarAsync(servidor);
             return resultado;
         }
 
-        public async Task<IEnumerable<Usuario>> BuscarTodos()
+        public Task<bool> InativarAsync(int idServidor)
         {
-            var resultado = await _usuarioRepositorio.BuscarTodos();
+            throw new NotImplementedException();
+        }
 
+        public async Task<IEnumerable<Usuario>> BuscarTodosAsync()
+        {
+            var resultado = await _servidorRepositorio.BuscarTodosAsync();
             return resultado;
         }
     }
 
     public interface IUsuario
     {
-        Task<bool> CadastrarAsync(Usuario usuario);
-        Task<IEnumerable<Usuario>> BuscarTodos();
+        Task<bool> CadastrarAsync(Usuario servidor);
+        //Task<bool> AlterarAsync(Servidor servidor);
+        Task<bool> InativarAsync(int idServidor);
+        Task<IEnumerable<Usuario>> BuscarTodosAsync();
     }
-
 }

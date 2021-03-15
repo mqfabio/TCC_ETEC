@@ -22,12 +22,12 @@ namespace TCC
         {
             services.AddControllers();
 
-            services.AddSingleton<IUsuario, Usuario>();
-            services.AddSingleton<IUsuarioRepositorio, UsuarioRepositorio>();
+            //services.AddSingleton<IExcluido, Excluido>();
+            //services.AddSingleton<IExcluidoRepositorio, ExcluidoRepositorio>();
             services.AddSingleton<IEvento, Evento>();
             services.AddSingleton<IEventoRepositorio, EventoRepositorio>();
-            services.AddSingleton<IServidor, Servidor>();
-            services.AddSingleton<IServidorRepositorio, ServidorRepositorio>();
+            services.AddSingleton<IUsuario, Usuario>();
+            services.AddSingleton<IUsuarioRepositorio, UsuarioRepositorio>();
             
 
             services.AddSwaggerGen(config => {

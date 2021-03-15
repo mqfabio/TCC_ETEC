@@ -92,10 +92,10 @@ namespace TCC.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> PegarPeloId(int id)
+        [HttpGet("{nome}")]
+        public async Task<IActionResult> PegarPeloNome(string nome)
         {
-            var resultado = await _evento.PegarPeloId(id);
+            var resultado = await _evento.PegarPeloNome(nome);
             try
             {
                 if (resultado != null)
