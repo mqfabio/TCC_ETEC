@@ -3,6 +3,11 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using TCC.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using TCC.Data;
+using System.Linq;
+using TCC.Services;
 
 namespace TCC.Controllers
 {
@@ -39,6 +44,27 @@ namespace TCC.Controllers
         //}
 
         [HttpPost]
+        [Route("Login")]
+        [AllowAnonymous]
+        public async Task<ActionResult<dynamic>> Authenticate([FromBody] Usuario model)
+        {
+            var user = model.NomeUsuario + model.Senha;
+
+            if (user == null)
+                return NotFound(new { message = "Usuário ou senha inválidos" });
+
+            var token = TokenService.GenerateToken(user);
+            user.Senha = "";
+            return new
+            {
+                user = user,
+                token = token
+            };
+
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CadastrarAsync(Usuario servidor)
         {
             var resultado = await _usuario.CadastrarAsync(servidor);

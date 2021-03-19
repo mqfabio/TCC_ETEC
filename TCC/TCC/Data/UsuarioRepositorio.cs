@@ -55,7 +55,7 @@ namespace TCC.Data
             }
            
         }
-
+        
         public async Task<IEnumerable<Usuario>> BuscarTodosAsync()
         {
             try
