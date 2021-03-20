@@ -23,14 +23,10 @@ namespace TCC
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy", builder => builder
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
-            });
+            services.AddCors(options => 
+                options.AddDefaultPolicy(
+                    builder => builder.AllowAnyOrigin()));
+           
             services.AddControllers();
 
             var key = Encoding.ASCII.GetBytes(Settings.Secret);
@@ -85,7 +81,7 @@ namespace TCC
 
             app.UseRouting();
 
-            app.UseCors("CorsPolicy");
+            app.UseCors();
             //app.UseCors(x => x
             //    .AllowAnyOrigin()
             //    .AllowAnyMethod()

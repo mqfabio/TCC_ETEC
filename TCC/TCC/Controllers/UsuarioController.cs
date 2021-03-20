@@ -43,25 +43,25 @@ namespace TCC.Controllers
         //    }
         //}
 
-        [HttpPost]
-        [Route("Login")]
-        [AllowAnonymous]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody] Usuario model)
-        {
-            var user = model.NomeUsuario + model.Senha;
+        //[HttpPost]
+        //[Route("Login")]
+        //[AllowAnonymous]
+        //public async Task<ActionResult<dynamic>> Authenticate([FromBody] Usuario model)
+        //{
+        //    var usuario = Usuario.get(model.NomeUsuario, model.Senha);
 
-            if (user == null)
-                return NotFound(new { message = "Usuário ou senha inválidos" });
+        //    if(User == null)
+        //        return NotFound(new { message = "Usuário ou senha inválidos" });
 
-            var token = TokenService.GenerateToken(user);
-            user.Senha = "";
-            return new
-            {
-                user = user,
-                token = token
-            };
+        //    var token = TokenService.GenerateToken(user);
+        //    user.Senha = "";
+        //    return new
+        //    {
+        //        user = user,
+        //        token = token
+        //    };
 
-        }
+        //}
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -106,6 +106,29 @@ namespace TCC.Controllers
             {
                 throw new Exception(e.Message);
             }
+        }
+
+        [HttpGet("{nome}")]
+        public async Task<IActionResult> PegarPeloNome(string nome)
+        {
+            var resultado = await _usuario.PegarPeloNome(nome);
+            try
+            {
+                if (resultado != null)
+                {
+                    return Ok(resultado);
+                }
+
+                else
+                {
+                    return BadRequest("Insira um nome valido");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+            }
+            throw new NotImplementedException();
         }
     }
    

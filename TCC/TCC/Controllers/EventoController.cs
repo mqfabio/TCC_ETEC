@@ -106,7 +106,7 @@ namespace TCC.Controllers
 
                 else
                 {
-                    return BadRequest("Insira um id valido");
+                    return BadRequest("Insira um nome valido");
                 }
             }
             catch (Exception ex)

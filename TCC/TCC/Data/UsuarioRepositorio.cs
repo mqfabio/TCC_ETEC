@@ -32,7 +32,28 @@ namespace TCC.Data
         //        throw new Exception(ex.Message);
         //    }
         //}   
-        
+
+        public async Task<Usuario> BuscarPorNome(string nome)
+        {
+            try
+            {
+                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
+                {
+                    var query = @"select  idUsuario, senha, codUE, RM, CPF, RG, dataNascimento, nomeUsuario, email, statusServidor, perfil from usuario Where nomeUsuario = @nome";
+
+                    var param = new { nome = nome };
+                    conexao.Open();
+                    var resultado = await conexao.QueryAsync<Usuario>(query, param);
+
+                    return resultado.FirstOrDefault();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public async Task<bool> CdastrarAsync(Usuario servidor)
         {
             try
@@ -82,5 +103,6 @@ public interface IUsuarioRepositorio
     //Task<bool> AlterarAsync(Servidor servidor);
     Task<bool> CdastrarAsync(Usuario servidor);
     Task<IEnumerable<Usuario>> BuscarTodosAsync();
+    Task<Usuario> BuscarPorNome(string nome);
 }
 

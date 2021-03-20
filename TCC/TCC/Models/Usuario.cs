@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TCC.Data;
 using TCC.Enums;
 
 namespace TCC.Models
@@ -27,10 +28,10 @@ namespace TCC.Models
         }
 
 
-        private readonly IUsuarioRepositorio _servidorRepositorio;
-        public Usuario(IUsuarioRepositorio servidorRepositorio)
+        private readonly IUsuarioRepositorio _usuarioRepositorio;
+        public Usuario(IUsuarioRepositorio usuarioRepositorio)
         {
-            _servidorRepositorio = servidorRepositorio;
+            _usuarioRepositorio = usuarioRepositorio;
         }
 
         //public async Task<bool> AlterarAsync(Servidor servidor)
@@ -41,7 +42,7 @@ namespace TCC.Models
 
         public async Task<bool> CadastrarAsync(Usuario servidor)
         {
-            var resultado = await _servidorRepositorio.CdastrarAsync(servidor);
+            var resultado = await _usuarioRepositorio.CdastrarAsync(servidor);
             return resultado;
         }
 
@@ -52,9 +53,16 @@ namespace TCC.Models
 
         public async Task<IEnumerable<Usuario>> BuscarTodosAsync()
         {
-            var resultado = await _servidorRepositorio.BuscarTodosAsync();
+            var resultado = await _usuarioRepositorio.BuscarTodosAsync();
             return resultado;
         }
+
+        public async Task<Usuario> PegarPeloNome(string nome)
+        {
+            var resultado = await _usuarioRepositorio.BuscarPorNome(nome);
+            return resultado;
+        }
+
     }
 
     public interface IUsuario
@@ -63,5 +71,6 @@ namespace TCC.Models
         //Task<bool> AlterarAsync(Servidor servidor);
         Task<bool> InativarAsync(int idServidor);
         Task<IEnumerable<Usuario>> BuscarTodosAsync();
+        Task<Usuario> PegarPeloNome(string nome);
     }
 }
