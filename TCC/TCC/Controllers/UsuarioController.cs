@@ -65,7 +65,7 @@ namespace TCC.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "teste")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CadastrarAsync(Usuario servidor)
         {
             var resultado = await _usuario.CadastrarAsync(servidor);

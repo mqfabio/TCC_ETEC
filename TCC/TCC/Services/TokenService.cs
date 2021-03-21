@@ -19,7 +19,7 @@ namespace TCC.Services
                 {
                     new Claim("id", user.IdUsuario.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, "teste")
+                    new Claim(ClaimTypes.Role, user.Perfil.ToString())
                 }),
 
                 Expires = DateTime.UtcNow.AddHours(1),

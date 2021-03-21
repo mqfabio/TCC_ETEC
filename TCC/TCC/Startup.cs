@@ -88,8 +88,8 @@ namespace TCC
             //    .AllowAnyMethod()
             //    .AllowAnyHeader());
 
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseSwagger();
 
