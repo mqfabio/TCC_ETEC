@@ -57,9 +57,9 @@ namespace TCC.Models
             return resultado;
         }
 
-        public async Task<Usuario> PegarPeloNome(string nome)
+        public async Task<Usuario> PegarPeloNome(string nome, string senha)
         {
-            var resultado = await _usuarioRepositorio.BuscarPorNome(nome);
+            var resultado = await _usuarioRepositorio.BuscarPorNomeESenha(nome, senha);
             return resultado;
         }
 
@@ -71,6 +71,6 @@ namespace TCC.Models
         //Task<bool> AlterarAsync(Servidor servidor);
         Task<bool> InativarAsync(int idServidor);
         Task<IEnumerable<Usuario>> BuscarTodosAsync();
-        Task<Usuario> PegarPeloNome(string nome);
+        Task<Usuario> PegarPeloNome(string nome, string senha);
     }
 }

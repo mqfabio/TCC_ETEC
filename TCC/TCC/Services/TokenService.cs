@@ -17,11 +17,12 @@ namespace TCC.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Email, user.NomeUsuario.ToString()),
-                    new Claim(ClaimTypes.Role, user.Perfil.ToString())
+                    new Claim("id", user.IdUsuario.ToString()),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, "teste")
                 }),
 
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                Expires = DateTime.UtcNow.AddHours(1),
                     SigningCredentials = 
                     new SigningCredentials(
                         new SymmetricSecurityKey(key),

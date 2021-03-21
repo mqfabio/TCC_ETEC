@@ -33,15 +33,16 @@ namespace TCC.Data
         //    }
         //}   
 
-        public async Task<Usuario> BuscarPorNome(string nome)
+       
+        public async Task<Usuario> BuscarPorNomeESenha(string nome, string senha)
         {
             try
             {
                 using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
                 {
-                    var query = @"select  idUsuario, senha, codUE, RM, CPF, RG, dataNascimento, nomeUsuario, email, statusServidor, perfil from usuario Where nomeUsuario = @nome";
+                    var query = @"select  idUsuario, senha, codUE, RM, CPF, RG, dataNascimento, nomeUsuario, email, statusServidor, perfil from usuario Where senha = @senha and nomeUsuario = @nome  ";
 
-                    var param = new { nome = nome };
+                    var param = new { nome = nome, senha = senha };
                     conexao.Open();
                     var resultado = await conexao.QueryAsync<Usuario>(query, param);
 
@@ -103,6 +104,6 @@ public interface IUsuarioRepositorio
     //Task<bool> AlterarAsync(Servidor servidor);
     Task<bool> CdastrarAsync(Usuario servidor);
     Task<IEnumerable<Usuario>> BuscarTodosAsync();
-    Task<Usuario> BuscarPorNome(string nome);
+    Task<Usuario> BuscarPorNomeESenha(string nome, string senha);
 }
 

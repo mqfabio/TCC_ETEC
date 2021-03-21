@@ -47,6 +47,7 @@ namespace TCC
                     ValidateAudience = false
                 };
             });
+
             //services.AddSingleton<IExcluido, Excluido>();
             //services.AddSingleton<IExcluidoRepositorio, ExcluidoRepositorio>();
             services.AddSingleton<IEvento, Evento>();

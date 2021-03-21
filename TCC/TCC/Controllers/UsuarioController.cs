@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using TCC.Data;
 using System.Linq;
 using TCC.Services;
+using TCC.DTO;
 
 namespace TCC.Controllers
 {
@@ -43,28 +44,28 @@ namespace TCC.Controllers
         //    }
         //}
 
-        //[HttpPost]
-        //[Route("Login")]
-        //[AllowAnonymous]
-        //public async Task<ActionResult<dynamic>> Authenticate([FromBody] Usuario model)
-        //{
-        //    var usuario = Usuario.get(model.NomeUsuario, model.Senha);
+        [HttpPost]
+        [Route("login")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserAuthenticationResponseDTO>> Authenticate([FromBody] Usuario model)
+        {
+            var usuario = await _usuario.PegarPeloNome(model.NomeUsuario, model.Senha);
 
-        //    if(User == null)
-        //        return NotFound(new { message = "Usuário ou senha inválidos" });
+            if(usuario == null)
+                return BadRequest("Usuário ou senha inválidos");
 
-        //    var token = TokenService.GenerateToken(user);
-        //    user.Senha = "";
-        //    return new
-        //    {
-        //        user = user,
-        //        token = token
-        //    };
+            var token = TokenService.GenerateToken(usuario);
+            usuario.Senha = "";
+            return new UserAuthenticationResponseDTO
+            {
+                Nome = usuario.NomeUsuario,
+                Token = token
+            };
 
-        //}
+        }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "teste")]
         public async Task<IActionResult> CadastrarAsync(Usuario servidor)
         {
             var resultado = await _usuario.CadastrarAsync(servidor);
@@ -109,9 +110,9 @@ namespace TCC.Controllers
         }
 
         [HttpGet("{nome}")]
-        public async Task<IActionResult> PegarPeloNome(string nome)
+        public async Task<IActionResult> PegarPeloNomeESenha(string nome, string senha)
         {
-            var resultado = await _usuario.PegarPeloNome(nome);
+            var resultado = await _usuario.PegarPeloNome(nome, senha);
             try
             {
                 if (resultado != null)
