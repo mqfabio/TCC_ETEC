@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using TCC.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TCC.Controllers
 {
@@ -23,6 +24,7 @@ namespace TCC.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CadastrarAsycn([Required][FromBody] Evento evento)
         {
             var resultado = await _evento.CadastrarAsync(evento);
@@ -47,6 +49,7 @@ namespace TCC.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AlterarAsycn([Required][FromBody] Evento evento)
         {
             var resultado = await _evento.AlterarAsync(evento);
@@ -71,6 +74,7 @@ namespace TCC.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ExcluirAsycn(int id)
         {
             var resultado = await _evento.ExcluirAsync(id);

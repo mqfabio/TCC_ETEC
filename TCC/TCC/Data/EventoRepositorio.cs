@@ -15,12 +15,12 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
+                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
                 {
                     var query = @"INSERT INTO [dbo].[evento]
-                                ( nome ,descricao ,data_evento ,hora ,nomeServidor, RG, statusEvento)
+                                ( nome ,descricao ,dataEvento, statusEvento)
                             Values
-                                (@Nome, @Descricao, @Data_Evento, @hora, @nomeServidor, @RG, @StatusEvento)";
+                                (@Nome, @Descricao, @DataEvento, @StatusEvento)";
 
                     var resultado = await conexao.ExecuteAsync(query, evento, commandType: CommandType.Text);
 
@@ -38,10 +38,10 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
+                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
                 {
                     var query = @"UPDATE [dbo].[evento] set
-                                nome = @nome ,descricao = @descricao, data_evento = @data_evento ,hora = Convert(Time, @hora), nomeServidor = @nomeServidor, RG = @RG ,statusEvento = @statusEvento
+                                nome = @nome ,descricao = @descricao, dataEvento = @dataEvento, statusEvento = @statusEvento
                             WHERE idEvento = @idEvento";
 
                     var resultado = await conexao.ExecuteAsync(query, evento, commandType: CommandType.Text);
@@ -59,7 +59,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
+                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
                 {
                     var param = new { id = id };
 
@@ -80,10 +80,10 @@ namespace TCC.Data
         public async Task<Evento> BuscarPorNome(string nome)
         {
             try
-            {
-                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
+            {                           //Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;
+                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
                 {
-                    var query = @"select  idEvento, nome,descricao,data_evento, Convert(DATETIME, hora) As HoraDb, nomeServidor, RG, statusEvento from evento Where Nome = @nome";
+                    var query = @"select  idEvento, nome, descricao, dataEvento, statusEvento from evento Where Nome = @nome";
 
                     var param = new { nome = nome };
                     conexao.Open();
@@ -102,9 +102,9 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
+                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
                 {
-                    var query = @"select  idEvento, nome,descricao,data_evento, Convert(DATETIME, hora) As HoraDb, nomeServidor, RG, statusEvento from evento";
+                    var query = @"select  idEvento, nome, descricao, dataEvento, statusEvento from evento";
                     var resultado = await conexao.QueryAsync<Evento>(query);
 
                     return resultado;

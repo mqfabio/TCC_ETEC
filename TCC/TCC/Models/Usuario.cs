@@ -11,17 +11,19 @@ namespace TCC.Models
         
 
         public int IdUsuario { get; set; }
-        public string Senha { get; set; }
         public int CodUE { get; set; }
-        public int RM { get; set; }
         public string Cpf { get; set; }
         public string Rg { get; set; }
         public DateTime DataNascimento { get; set; }
         public string NomeUsuario { get; set; }
         public string Email { get; set; }
         public string Cargo { get; set; }
-        public string StatusServidor { get; set; }
-        public TipoPerfil Perfil { get; set; }
+        public StatusEventoEnum StatusUsuario { get; set; }
+        public string Titulacao { get; set; }
+        public string Senha { get; set; }
+        public int RM { get; set; }
+        public PerfilEnum Perfil { get; set; }
+
 
         public Usuario()
         {
@@ -63,6 +65,12 @@ namespace TCC.Models
             return resultado;
         }
 
+        public async Task<bool> AlterarAsync(Usuario usuario)
+        {
+            var resultado = await _usuarioRepositorio.AlterarAsync(usuario);
+            return resultado;
+        }
+
     }
 
     public interface IUsuario
@@ -72,5 +80,6 @@ namespace TCC.Models
         Task<bool> InativarAsync(int idServidor);
         Task<IEnumerable<Usuario>> BuscarTodosAsync();
         Task<Usuario> PegarPeloNome(string nome, string senha);
+        Task<bool> AlterarAsync(Usuario idUsuario);
     }
 }

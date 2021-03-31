@@ -9,6 +9,7 @@ using TCC.Data;
 using System.Linq;
 using TCC.Services;
 using TCC.DTO;
+using System.ComponentModel.DataAnnotations;
 
 namespace TCC.Controllers
 {
@@ -88,6 +89,7 @@ namespace TCC.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> BuscartodosASync()
         {
             var resultado = await _usuario.BuscarTodosAsync();
@@ -130,6 +132,29 @@ namespace TCC.Controllers
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
             }
             throw new NotImplementedException();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AlterarAsync([Required][FromBody] Usuario usuario)
+        {
+            var resultado = await _usuario.AlterarAsync(usuario);
+
+            try
+            {
+                if (resultado)
+                {
+                    return StatusCode(HttpStatusCode.Created.GetHashCode());
+                }
+                else
+                {
+                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+                }
+            }
+            catch (Exception e)
+            {
+                throw new NotImplementedException();
+            }
+           
         }
     }
    
