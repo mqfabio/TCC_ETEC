@@ -11,11 +11,14 @@ namespace TCC.Data
 {
     public class EventoRepositorio : IEventoRepositorio
     {
+
+        string local = "Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True";
+        string somee = "workstation id=TccEtec.mssql.somee.com;packet size = 4096; user id = Giselle_SQLLogin_1; pwd=a7autn81ou;data source = TccEtec.mssql.somee.com; persist security info=False;initial catalog = TccEtec";
         public async Task<bool> CadastrarAsync(Evento evento)
         {
             try
             {
-                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
+                using (var conexao = new SqlConnection(local))
                 {
                     var query = @"INSERT INTO [dbo].[evento]
                                 ( nome ,descricao ,dataEvento, statusEvento)
@@ -38,7 +41,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
+                using (var conexao = new SqlConnection(local))
                 {
                     var query = @"UPDATE [dbo].[evento] set
                                 nome = @nome ,descricao = @descricao, dataEvento = @dataEvento, statusEvento = @statusEvento
@@ -59,7 +62,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
+                using (var conexao = new SqlConnection(local))
                 {
                     var param = new { id = id };
 
@@ -81,7 +84,7 @@ namespace TCC.Data
         {
             try
             {                           //Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;
-                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
+                using (var conexao = new SqlConnection(local))
                 {
                     var query = @"select  idEvento, nome, descricao, dataEvento, statusEvento from evento Where Nome = @nome";
 
@@ -102,7 +105,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
+                using (var conexao = new SqlConnection(local))
                 {
                     var query = @"select  idEvento, nome, descricao, dataEvento, statusEvento from evento";
                     var resultado = await conexao.QueryAsync<Evento>(query);

@@ -13,7 +13,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TCC.Controllers
 {
-
+    [Authorize]
     [ApiController]
     [Route("Usuario")]
     public class UsuarioController : ControllerBase
@@ -50,7 +50,8 @@ namespace TCC.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<UserAuthenticationResponseDTO>> Authenticate([FromBody] Usuario model)
         {
-            var usuario = await _usuario.PegarPeloNome(model.NomeUsuario, model.Senha);
+            //var usuario = await _usuario.PegarPeloNome(model.Email, model.Senha);
+            var usuario = await _usuario.VerificarUsuarioAtivo(model);
 
             if(usuario == null)
                 return BadRequest("Usuário ou senha inválidos");
@@ -112,9 +113,9 @@ namespace TCC.Controllers
         }
 
         [HttpGet("{nome}")]
-        public async Task<IActionResult> PegarPeloNomeESenha(string nome, string senha)
+        public async Task<IActionResult> PegarPeloEmailESenha(string email, string senha)
         {
-            var resultado = await _usuario.PegarPeloNome(nome, senha);
+            var resultado = await _usuario.PegarPeloNome(email, senha);
             try
             {
                 if (resultado != null)

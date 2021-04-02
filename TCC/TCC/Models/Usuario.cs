@@ -18,7 +18,7 @@ namespace TCC.Models
         public string NomeUsuario { get; set; }
         public string Email { get; set; }
         public string Cargo { get; set; }
-        public StatusEventoEnum StatusUsuario { get; set; }
+        public StatusUsuarioEnum StatusUsuario { get; set; }
         public string Titulacao { get; set; }
         public string Senha { get; set; }
         public int RM { get; set; }
@@ -59,9 +59,15 @@ namespace TCC.Models
             return resultado;
         }
 
-        public async Task<Usuario> PegarPeloNome(string nome, string senha)
+        public async Task<Usuario> PegarPeloNome(string email, string senha)
         {
-            var resultado = await _usuarioRepositorio.BuscarPorNomeESenha(nome, senha);
+            var resultado = await _usuarioRepositorio.BuscarPorNomeESenha(email, senha);
+            return resultado;
+        }
+
+        public async Task<Usuario> VerificarUsuarioAtivo(Usuario usuario)
+        {
+            var resultado = await _usuarioRepositorio.VerificarUsuarioAtivo(usuario);
             return resultado;
         }
 
@@ -79,7 +85,8 @@ namespace TCC.Models
         //Task<bool> AlterarAsync(Servidor servidor);
         Task<bool> InativarAsync(int idServidor);
         Task<IEnumerable<Usuario>> BuscarTodosAsync();
-        Task<Usuario> PegarPeloNome(string nome, string senha);
+        Task<Usuario> PegarPeloNome(string email, string senha);
         Task<bool> AlterarAsync(Usuario idUsuario);
+        Task<Usuario> VerificarUsuarioAtivo(Usuario usuario);
     }
 }

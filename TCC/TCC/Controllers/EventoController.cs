@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace TCC.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("evento")]
     public class EventoController : ControllerBase

@@ -11,18 +11,23 @@ namespace TCC.Data
 {
     public class UsuarioRepositorio : IUsuarioRepositorio
     {
-        //public async Task<bool> AlterarAsync(Servidor servidor)
+        string local = "Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True";
+        string somee = "workstation id=TccEtec.mssql.somee.com;packet size = 4096; user id = Giselle_SQLLogin_1; pwd=a7autn81ou;data source = TccEtec.mssql.somee.com; persist security info=False;initial catalog = TccEtec";
+
+
+        //public async Task<bool> AlterarAsync(Usuario usuario)
         //{
         //    try
         //    {
-        //        using (var conexao = new SqlConnection("Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;"))
+        //        using (var conexao = new SqlConnection(local))
         //        {
         //            var query = @"UPDATE [dbo].[evento] set
-        //                        CodUE = @CodUE ,RM = @RM ,CPF = @CPF, RG = @RG ,dataNascimento = @dataNascimento ,
-        //                        nomeServidor = @nomeServidor, email = @email, cargo = @cargo, statusServidor = @statusServidor
-        //                    WHERE idServidor = @idServidor";
+        //                        CodUE = @CodUE , CPF = @CPF, RG = @RG ,dataNascimento = @dataNascimento ,
+        //                        nomeUsuario = @nomeUsuario, email = @email, cargo = @cargo, statusUsuario = 
+        //                        @statusUsuario, titulacao = @titulacao, senha = @senha, RM = @RM, perfil = @perfil
+        //                    WHERE idUsuario = @idUsuario";
 
-        //            var resultado = await conexao.ExecuteAsync(query, servidor, commandType: CommandType.Text);
+        //            var resultado = await conexao.ExecuteAsync(query, usuario, commandType: CommandType.Text);
 
         //            return resultado == 1;
         //        }
@@ -33,20 +38,42 @@ namespace TCC.Data
         //    }
         //}   
 
-
-        public async Task<Usuario> BuscarPorNomeESenha(string nome, string senha)
+        public async Task<Usuario> VerificarUsuarioAtivo(Usuario usuario)
         {
             try
             {
-                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
-                {
-                    var query = @"select  idUsuario, senha, codUE, RM, CPF, RG, dataNascimento, nomeUsuario, email, statusUsuario, perfil, titulacao, cargo from usuario Where senha = @senha and nomeUsuario = @nome  ";
+                var resultado =  await BuscarPorNomeESenha(usuario.Email, usuario.Senha);
 
-                    var param = new { nome = nome, senha = senha };
+                if (resultado.StatusUsuario == 0)
+                    return resultado;
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message + "Usuario nao existe");
+            }
+
+
+
+        }
+        public async Task<Usuario> BuscarPorNomeESenha(string email, string senha)
+        {
+            try
+            {
+                using (var conexao = new SqlConnection(local))
+                {
+                    var query = @"select  idUsuario, senha, codUE, RM, CPF, RG, dataNascimento, nomeUsuario, email, statusUsuario, perfil, titulacao, cargo from usuario Where senha = @senha and email = @email  ";
+
+                    var param = new { email = email, senha = senha };
                     conexao.Open();
                     var resultado = await conexao.QueryAsync<Usuario>(query, param);
+                    var resultado2 = resultado.FirstOrDefault();
 
                     return resultado.FirstOrDefault();
+
                 }
             }
             catch (Exception e)
@@ -59,7 +86,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
+                using (var conexao = new SqlConnection(local))
                 {
                     var query = @"INSERT INTO [dbo].[usuario]
                                 ( senha, codUE, RM, CPF, RG, dataNascimento, nomeUsuario, email, statusUsuario, perfil, titulacao, cargo)
@@ -82,7 +109,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
+                using (var conexao = new SqlConnection(local))
                 {
                     var query = @"select  IdUsuario, Senha, CodUE, RM, CPF, RG, DataNascimento, NomeUsuario, Email, Cargo, StatusUsuario, Perfil from usuario";
                     var resultado = await conexao.QueryAsync<Usuario>(query);
@@ -101,11 +128,12 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection("workstation id=TccEtec.mssql.somee.com;packet size=4096;user id=Giselle_SQLLogin_1;pwd=a7autn81ou;data source=TccEtec.mssql.somee.com;persist security info=False;initial catalog=TccEtec"))
+                using (var conexao = new SqlConnection(local))
                 {
                     var query = @"UPDATE [dbo].[usuario] set
-                                senha = @senha, codUE = @codUE, RM = @RM, CPF = CPF, RG = RG, dataNascimento = @dataNascimento, nomeUsuario = @nomeUsuario, email = @email, cargo = @cargo, statusUsuario = @statusUsuario, perfil = @perfil
-                              
+                                senha = @senha, codUE = @codUE, RM = @RM, CPF = CPF, RG = RG, dataNascimento = @dataNascimento, 
+                                nomeUsuario = @nomeUsuario, email = @email, cargo = @cargo, statusUsuario = @statusUsuario, 
+                                perfil = @perfil
                             WHERE idUSuario = @idUsuario";
 
                     var resultado = await conexao.ExecuteAsync(query, usuario, commandType: CommandType.Text);
@@ -127,5 +155,6 @@ public interface IUsuarioRepositorio
     Task<IEnumerable<Usuario>> BuscarTodosAsync();
     Task<Usuario> BuscarPorNomeESenha(string nome, string senha);
     Task<bool> AlterarAsync(Usuario usuario);
+    Task<Usuario> VerificarUsuarioAtivo(Usuario usuario);
 }
 
