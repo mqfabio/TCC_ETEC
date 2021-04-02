@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
-using TCC.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using TCC.Data;
-using System.Linq;
-using TCC.Services;
 using TCC.DTO;
-using System.ComponentModel.DataAnnotations;
+using TCC.Models;
+using TCC.Services;
 
 namespace TCC.Controllers
 {
@@ -51,7 +48,7 @@ namespace TCC.Controllers
         public async Task<ActionResult<UserAuthenticationResponseDTO>> Authenticate([FromBody] Usuario model)
         {
             //var usuario = await _usuario.PegarPeloNome(model.Email, model.Senha);
-            var usuario = await _usuario.VerificarUsuarioAtivo(model);
+            var usuario = await _usuario.PegarPeloEmailSenha(model.Email, model.Senha);
 
             if(usuario == null)
                 return BadRequest("Usuário ou senha inválidos");
@@ -115,7 +112,7 @@ namespace TCC.Controllers
         [HttpGet("{nome}")]
         public async Task<IActionResult> PegarPeloEmailESenha(string email, string senha)
         {
-            var resultado = await _usuario.PegarPeloNome(email, senha);
+            var resultado = await _usuario.PegarPeloEmailSenha(email, senha);
             try
             {
                 if (resultado != null)

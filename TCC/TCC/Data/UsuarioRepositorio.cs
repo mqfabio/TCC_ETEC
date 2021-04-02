@@ -38,34 +38,16 @@ namespace TCC.Data
         //    }
         //}   
 
-        public async Task<Usuario> VerificarUsuarioAtivo(Usuario usuario)
-        {
-            try
-            {
-                var resultado =  await BuscarPorNomeESenha(usuario.Email, usuario.Senha);
-
-                if (resultado.StatusUsuario == 0)
-                    return resultado;
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message + "Usuario nao existe");
-            }
-
-
-
-        }
-        public async Task<Usuario> BuscarPorNomeESenha(string email, string senha)
+ 
+        public async Task<Usuario> BuscarPorEmailESenha(string email, string senha)
         {
             try
             {
                 using (var conexao = new SqlConnection(local))
                 {
-                    var query = @"select  idUsuario, senha, codUE, RM, CPF, RG, dataNascimento, nomeUsuario, email, statusUsuario, perfil, titulacao, cargo from usuario Where senha = @senha and email = @email  ";
+                    var query = @"select  idUsuario, senha, codUE, RM, CPF, RG, dataNascimento, nomeUsuario, email, 
+                                statusUsuario, perfil, titulacao, cargo from usuario 
+                                Where senha = @senha and email = @email and statusUsuario = 0 ";
 
                     var param = new { email = email, senha = senha };
                     conexao.Open();
@@ -153,8 +135,7 @@ public interface IUsuarioRepositorio
     //Task<bool> AlterarAsync(Servidor servidor);
     Task<bool> CdastrarAsync(Usuario servidor);
     Task<IEnumerable<Usuario>> BuscarTodosAsync();
-    Task<Usuario> BuscarPorNomeESenha(string nome, string senha);
+    Task<Usuario> BuscarPorEmailESenha(string nome, string senha);
     Task<bool> AlterarAsync(Usuario usuario);
-    Task<Usuario> VerificarUsuarioAtivo(Usuario usuario);
 }
 
