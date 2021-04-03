@@ -54,6 +54,9 @@ namespace TCC
             services.AddSingleton<IEventoRepositorio, EventoRepositorio>();
             services.AddSingleton<IUsuario, Usuario>();
             services.AddSingleton<IUsuarioRepositorio, UsuarioRepositorio>();
+            services.AddSingleton<IParticipante_evento, Participante_evento>();
+            services.AddSingleton<IParticipanteEventoRepositorio, ParticipanteEventoRepositorio>();
+
             
 
             services.AddSwaggerGen(config => {

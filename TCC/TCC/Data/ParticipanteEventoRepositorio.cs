@@ -21,7 +21,7 @@ namespace TCC.Data
                 using (var conexao = new SqlConnection(local))
                 {
                     var query = @"INSERT INTO [dbo].[participante_evento]
-                            (id_evento, idUsuario)
+                            (idEvento, idUsuario)
                         values
                             (@IdEvento, @IdUsuario)";
 

@@ -12,7 +12,7 @@ namespace TCC.Models
         
 
         public int IdEvento { get; set; }
-        public int IdServidor { get; set; }
+        public int IdUsuario { get; set; }
 
 
 
@@ -22,6 +22,10 @@ namespace TCC.Models
             _participanteEventoRepositorio = participanteEventoRepositorio;
         }
 
+        public Participante_evento()
+        {
+                
+        }
 
 
         public async Task<bool> CadastrarAsync(Participante_evento pe)
