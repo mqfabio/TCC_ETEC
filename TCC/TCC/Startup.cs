@@ -56,6 +56,8 @@ namespace TCC
             services.AddSingleton<IUsuarioRepositorio, UsuarioRepositorio>();
             services.AddSingleton<IParticipante_evento, Participante_evento>();
             services.AddSingleton<IParticipanteEventoRepositorio, ParticipanteEventoRepositorio>();
+            services.AddSingleton<IRequisicao, Requisicao>();
+            services.AddSingleton<IRequisicaoRepositorio, RequisicaoRepositorio>();
 
             
 
