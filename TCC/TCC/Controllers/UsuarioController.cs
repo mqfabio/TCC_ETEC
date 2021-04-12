@@ -21,33 +21,13 @@ namespace TCC.Controllers
             _usuario = usuario;
         }
 
-        //[HttpPut]
-        //public async Task<IActionResult> AlterarAsync([Required][FromBody] Servidor servidor)
-        //{
-        //    var resultado = await _servidor.AlterarAsync(servidor);
-        //    try
-        //    {
-        //        if (resultado)
-        //        {
-        //            return StatusCode(HttpStatusCode.Created.GetHashCode());
-        //        }
-        //        else
-        //        {
-        //            return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
-        //        }
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        throw new NotImplementedException();
-        //    }
-        //}
+       
 
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserAuthenticationResponseDTO>> Authenticate([FromBody] Usuario model)
+        public async Task<ActionResult<LoginDoUsuarioDTO>> Authenticate([FromBody] Usuario model)
         {
-            //var usuario = await _usuario.PegarPeloNome(model.Email, model.Senha);
             var usuario = await _usuario.PegarPeloEmailSenha(model.Email, model.Senha);
 
             if(usuario == null)
@@ -55,7 +35,7 @@ namespace TCC.Controllers
 
             var token = TokenService.GenerateToken(usuario);
             usuario.Senha = "";
-            return new UserAuthenticationResponseDTO
+            return new LoginDoUsuarioDTO
             {
                 Nome = usuario.NomeUsuario,
                 Token = token
@@ -109,10 +89,12 @@ namespace TCC.Controllers
             }
         }
 
-        [HttpGet("{nome}")]
-        public async Task<IActionResult> PegarPeloEmailESenha(string email, string senha)
+        
+
+        [HttpGet("{email}")]
+        public async Task<IActionResult> PegarPeloEmail(string email)
         {
-            var resultado = await _usuario.PegarPeloEmailSenha(email, senha);
+            var resultado = await _usuario.PegarPeloEmail(email);
             try
             {
                 if (resultado != null)
@@ -122,7 +104,7 @@ namespace TCC.Controllers
 
                 else
                 {
-                    return BadRequest("Insira um nome valido");
+                    return BadRequest("Insira um email valido");
                 }
             }
             catch (Exception ex)
@@ -131,6 +113,7 @@ namespace TCC.Controllers
             }
             throw new NotImplementedException();
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> AlterarAsync([Required][FromBody] Usuario usuario)

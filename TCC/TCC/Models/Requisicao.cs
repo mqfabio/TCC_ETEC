@@ -48,12 +48,20 @@ namespace TCC.Models
 
             return resultado;
         }
+
+        public async Task<Requisicao> BuscarPorEmail(string email)
+        {
+            var resultado = await _requisicaoRepositorio.BuscarPorUsuario(email);
+            return resultado;
+        }
+
     }
     
     public interface IRequisicao 
     {
         Task<IEnumerable<Requisicao>> BuscarTodos();
         Task<bool> CadastrarAsync(Requisicao requisicao);
+        Task<Requisicao> BuscarPorEmail(string email);
     }
 
 }

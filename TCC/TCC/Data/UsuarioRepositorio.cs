@@ -37,8 +37,32 @@ namespace TCC.Data
         //        throw new Exception(ex.Message);
         //    }
         //}   
+        public async Task<Usuario> BuscarPorEmail(string email)
+        {
+           
+            try
+            {
+                using (var conexao = new SqlConnection(somee))
+                {
+                    var query = @"select  idUsuario, senha, codUE, RM, CPF, RG, dataNascimento, nomeUsuario, email, 
+                                statusUsuario, perfil, titulacao, cargo from usuario 
+                                Where email = @email and statusUsuario = 0 ";
 
- 
+                    var param = new { email = email};
+                    conexao.Open();
+                    var resultado = await conexao.QueryAsync<Usuario>(query, param);
+                    var resultado2 = resultado.FirstOrDefault();
+
+                    return resultado.FirstOrDefault();
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public async Task<Usuario> BuscarPorEmailESenha(string email, string senha)
         {
             try
@@ -68,7 +92,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var query = @"INSERT INTO [dbo].[usuario]
                                 ( senha, codUE, RM, CPF, RG, dataNascimento, nomeUsuario, email, statusUsuario, perfil, titulacao, cargo)
@@ -91,7 +115,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var query = @"select  IdUsuario, Senha, CodUE, RM, CPF, RG, DataNascimento, NomeUsuario, Email, Cargo, StatusUsuario, Perfil from usuario";
                     var resultado = await conexao.QueryAsync<Usuario>(query);
@@ -110,7 +134,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var query = @"UPDATE [dbo].[usuario] set
                                 senha = @senha, codUE = @codUE, RM = @RM, CPF = CPF, RG = RG, dataNascimento = @dataNascimento, 
@@ -137,5 +161,6 @@ public interface IUsuarioRepositorio
     Task<IEnumerable<Usuario>> BuscarTodosAsync();
     Task<Usuario> BuscarPorEmailESenha(string nome, string senha);
     Task<bool> AlterarAsync(Usuario usuario);
+    Task<Usuario> BuscarPorEmail(string email);
 }
 

@@ -67,6 +67,23 @@ namespace TCC.Controllers
             throw new NotImplementedException();
         }
 
+        [HttpGet("{email}")]
+        public async Task<IActionResult> BuscarPeloEmail(string email)
+        {
+            var resultado = await _requisicao.BuscarPorEmail(email);
+            try
+            {
+                if (resultado != null)
+                    return Ok(resultado);
+                else
+                    return BadRequest();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
 
 
 

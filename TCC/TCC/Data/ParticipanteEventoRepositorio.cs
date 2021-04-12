@@ -18,7 +18,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var query = @"INSERT INTO [dbo].[participante_evento]
                             (idEvento, idUsuario)

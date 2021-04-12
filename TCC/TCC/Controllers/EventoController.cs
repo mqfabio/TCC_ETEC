@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
+using TCC.DTO;
 using TCC.Models;
 
 namespace TCC.Controllers
@@ -21,7 +22,7 @@ namespace TCC.Controllers
         }
 
 
-        [HttpPost]
+        //[HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CadastrarAsycn([Required][FromBody] Evento evento)
         {
@@ -131,6 +132,44 @@ namespace TCC.Controllers
                     return BadRequest();
             }
             catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet("{nomeEvento}/{dataInicio}/{datafim}")]
+        public async Task<ActionResult<Evento>> BuscarEventosPeloNomeOuData(string nomeEvento, DateTime dataInicio, DateTime datafim)
+        {
+            var resultado = await _evento.BuscarEventosPeloNomeOuData(nomeEvento, dataInicio, datafim);
+            try
+            {
+                if (resultado != null)
+                    return Ok(resultado);
+                else
+                    return BadRequest();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet("{rm}")]
+        public async Task<IActionResult> BuscarPeloRm(int rm)
+        {
+            var resultado = await _evento.BuscarPeloRm(rm);
+            try
+            {
+                if(resultado != null)
+                {
+                    return Ok(resultado);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch(Exception e)
             {
                 throw new Exception(e.Message);
             }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TCC.Data;
+using TCC.DTO;
 using TCC.Enums;
 
 namespace TCC.Models
@@ -39,7 +40,7 @@ namespace TCC.Models
         {
 
         }
-        public Evento(string nome, string descricao, DateTime data_evento, string nomeServidor, string rg, StatusEventoEnum statusEvento)
+        public Evento(string nome, string descricao, DateTime data_evento, string nomeServidor, StatusEventoEnum statusEvento)
         {
             
             Nome = nome;
@@ -80,6 +81,18 @@ namespace TCC.Models
             var resultado = await _eventoRepositorio.BuscarTodos();
             return resultado;
         }
+
+        public async Task<IEnumerable<EventoDoUsuarioDTO>> BuscarEventosPeloNomeOuData(string nomeEvento, DateTime dataInicio, DateTime datafim)
+        {
+            var resultado = await _eventoRepositorio.BuscarEventosPeloNomeOuData(nomeEvento, dataInicio, datafim);
+            return resultado;
+        }
+
+        public async Task<IEnumerable<Evento>> BuscarPeloRm(int rm)
+        {
+            var resultado = await _eventoRepositorio.BuscarPeloRm(rm);
+            return resultado;
+        }
     }
 
 
@@ -91,6 +104,9 @@ namespace TCC.Models
         Task<bool> ExcluirAsync(int idEvento);
         Task<Evento> PegarPeloNome(string nome);
         Task<IEnumerable<Evento>> BuscarTodos();
+        Task<IEnumerable<EventoDoUsuarioDTO>> BuscarEventosPeloNomeOuData(string nomeEvento, DateTime dataInicio, DateTime datafim);
+        Task<IEnumerable<Evento>> BuscarPeloRm(int rm);
+
 
 
 
