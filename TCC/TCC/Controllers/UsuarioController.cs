@@ -26,7 +26,7 @@ namespace TCC.Controllers
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<LoginDoUsuarioDTO>> Authenticate([FromBody] Usuario model)
+        public async Task<ActionResult<LoginDoUsuarioDTO>> AutenticaçãoDoUsuario([FromBody] Usuario model)
         {
             var usuario = await _usuario.PegarPeloEmailSenha(model.Email, model.Senha);
 
@@ -40,14 +40,15 @@ namespace TCC.Controllers
                 Nome = usuario.NomeUsuario,
                 Token = token
             };
-
         }
+
+
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CadastrarAsync(Usuario servidor)
+        public async Task<IActionResult> Cadastrar(Usuario servidor)
         {
-            var resultado = await _usuario.CadastrarAsync(servidor);
+            var resultado = await _usuario.Cadastrar(servidor);
             try
             {
                 if (resultado)
@@ -66,11 +67,13 @@ namespace TCC.Controllers
             throw new NotImplementedException();
         }
 
+
+
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> BuscartodosASync()
+        public async Task<IActionResult> Buscartodos()
         {
-            var resultado = await _usuario.BuscarTodosAsync();
+            var resultado = await _usuario.BuscarTodos();
             try
             {
                 if(resultado != null)
@@ -115,10 +118,11 @@ namespace TCC.Controllers
         }
 
 
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> AlterarAsync([Required][FromBody] Usuario usuario)
+        public async Task<IActionResult> Alterar([Required][FromBody] Usuario usuario)
         {
-            var resultado = await _usuario.AlterarAsync(usuario);
+            var resultado = await _usuario.Alterar(usuario);
 
             try
             {

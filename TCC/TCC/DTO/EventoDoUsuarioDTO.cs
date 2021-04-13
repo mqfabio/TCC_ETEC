@@ -12,7 +12,8 @@ namespace TCC.DTO
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public DateTime DataEvento { get; set; }
-        public string NomeUsuario { get; set; }
         public string StatusEvento { get; set; }
+        public string NomeUsuario { get; set; }
+        
     }
 }

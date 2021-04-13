@@ -42,20 +42,20 @@ namespace TCC.Models
         //    return resultado;
         //}
 
-        public async Task<bool> CadastrarAsync(Usuario servidor)
+        public async Task<bool> Cadastrar(Usuario servidor)
         {
-            var resultado = await _usuarioRepositorio.CdastrarAsync(servidor);
+            var resultado = await _usuarioRepositorio.Cdastrar(servidor);
             return resultado;
         }
 
-        public Task<bool> InativarAsync(int idServidor)
+        public Task<bool> Inativar(int idServidor)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Usuario>> BuscarTodosAsync()
+        public async Task<IEnumerable<Usuario>> BuscarTodos()
         {
-            var resultado = await _usuarioRepositorio.BuscarTodosAsync();
+            var resultado = await _usuarioRepositorio.BuscarTodos();
             return resultado;
         }
 
@@ -72,9 +72,9 @@ namespace TCC.Models
         }
 
 
-        public async Task<bool> AlterarAsync(Usuario usuario)
+        public async Task<bool> Alterar(Usuario usuario)
         {
-            var resultado = await _usuarioRepositorio.AlterarAsync(usuario);
+            var resultado = await _usuarioRepositorio.Alterar(usuario);
             return resultado;
         }
 
@@ -82,12 +82,12 @@ namespace TCC.Models
 
     public interface IUsuario
     {
-        Task<bool> CadastrarAsync(Usuario servidor);
+        Task<bool> Cadastrar(Usuario servidor);
         //Task<bool> AlterarAsync(Servidor servidor);
-        Task<bool> InativarAsync(int idServidor);
-        Task<IEnumerable<Usuario>> BuscarTodosAsync();
+        Task<bool> Inativar(int idServidor);
+        Task<IEnumerable<Usuario>> BuscarTodos();
         Task<Usuario> PegarPeloEmailSenha(string email, string senha);
-        Task<bool> AlterarAsync(Usuario idUsuario);
+        Task<bool> Alterar(Usuario idUsuario);
         Task<Usuario> PegarPeloEmail(string email);
     }
 }

@@ -51,22 +51,22 @@ namespace TCC.Models
             
         }
 
-        public async Task<bool> CadastrarAsync(Evento evento)
+        public async Task<bool> Cadastrar(Evento evento)
         {
-            var resultado = await _eventoRepositorio.CadastrarAsync(evento);
+            var resultado = await _eventoRepositorio.Cadastrar(evento);
 
             return resultado;
         }
 
-        public async Task<bool> AlterarAsync(Evento evento)
+        public async Task<bool> Alterar(Evento evento)
         {
             var resultado = await _eventoRepositorio.AlterarAsync(evento);
             return resultado;
         }
 
-        public async Task<bool> ExcluirAsync(int idEvento)
+        public async Task<bool> Excluir(int idEvento)
         {
-            var resultado = await _eventoRepositorio.DeletarAsync(idEvento);
+            var resultado = await _eventoRepositorio.Deletar(idEvento);
             return resultado;
         }
 
@@ -82,9 +82,9 @@ namespace TCC.Models
             return resultado;
         }
 
-        public async Task<IEnumerable<EventoDoUsuarioDTO>> BuscarEventosPeloNomeOuData(string nomeEvento, DateTime dataInicio, DateTime datafim)
+        public async Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuario(string nomeEvento, DateTime dataInicio, DateTime datafim)
         {
-            var resultado = await _eventoRepositorio.BuscarEventosPeloNomeOuData(nomeEvento, dataInicio, datafim);
+            var resultado = await _eventoRepositorio.BuscarEventosPeloNomeouDataTrazendoUsuario(nomeEvento, dataInicio, datafim);
             return resultado;
         }
 
@@ -99,12 +99,12 @@ namespace TCC.Models
 
     public interface IEvento
     {
-        Task<bool> CadastrarAsync(Evento evento);
-        Task<bool> AlterarAsync(Evento evento);
-        Task<bool> ExcluirAsync(int idEvento);
+        Task<bool> Cadastrar(Evento evento);
+        Task<bool> Alterar(Evento evento);
+        Task<bool> Excluir(int idEvento);
         Task<Evento> PegarPeloNome(string nome);
         Task<IEnumerable<Evento>> BuscarTodos();
-        Task<IEnumerable<EventoDoUsuarioDTO>> BuscarEventosPeloNomeOuData(string nomeEvento, DateTime dataInicio, DateTime datafim);
+        Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuario(string nomeEvento, DateTime dataInicio, DateTime datafim);
         Task<IEnumerable<Evento>> BuscarPeloRm(int rm);
 
 

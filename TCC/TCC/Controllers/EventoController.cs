@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
@@ -22,11 +23,11 @@ namespace TCC.Controllers
         }
 
 
-        //[HttpPost]
+        [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CadastrarAsycn([Required][FromBody] Evento evento)
+        public async Task<IActionResult> Cadastrar([Required][FromBody] Evento evento)
         {
-            var resultado = await _evento.CadastrarAsync(evento);
+            var resultado = await _evento.Cadastrar(evento);
 
             try
             {
@@ -47,11 +48,12 @@ namespace TCC.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpPut]
+
+        [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AlterarAsycn([Required][FromBody] Evento evento)
+        public async Task<IActionResult> Alterar([Required][FromBody] Evento evento)
         {
-            var resultado = await _evento.AlterarAsync(evento);
+            var resultado = await _evento.Alterar(evento);
             try
             {
                 if (resultado)
@@ -61,7 +63,7 @@ namespace TCC.Controllers
 
                 else
                 {
-                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Não foi possivel atualizar o evento.");
                 }
             }
             catch (Exception e)
@@ -74,9 +76,9 @@ namespace TCC.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ExcluirAsycn(int id)
+        public async Task<IActionResult> Excluir(int id)
         {
-            var resultado = await _evento.ExcluirAsync(id);
+            var resultado = await _evento.Excluir(id);
             try
             {
                 if (resultado)
@@ -86,7 +88,7 @@ namespace TCC.Controllers
 
                 else
                 {
-                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "O evento não foi excluido.");
                 }
             }
             catch (Exception ex)
@@ -96,7 +98,7 @@ namespace TCC.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpGet("{nome}")]
+        //[HttpGet("{nome}")]
         public async Task<IActionResult> PegarPeloNome(string nome)
         {
             var resultado = await _evento.PegarPeloNome(nome);
@@ -129,7 +131,7 @@ namespace TCC.Controllers
                     return Ok(resultado);
 
                 else
-                    return BadRequest();
+                    return NotFound();
             }
             catch (Exception e)
             {
@@ -137,16 +139,16 @@ namespace TCC.Controllers
             }
         }
 
-        [HttpGet("{nomeEvento}/{dataInicio}/{datafim}")]
-        public async Task<ActionResult<Evento>> BuscarEventosPeloNomeOuData(string nomeEvento, DateTime dataInicio, DateTime datafim)
+        [HttpGet("{nomeEvento}/{dataInicio:DateTime}/{datafim}")]
+        public async Task<ActionResult<List<EventoComUsuariosParticipantes>>> BuscarEventosPeloNomeouDataTrazendoUsuario(string nomeEvento, DateTime dataInicio, DateTime datafim)
         {
-            var resultado = await _evento.BuscarEventosPeloNomeOuData(nomeEvento, dataInicio, datafim);
+            var resultado = await _evento.BuscarEventosPeloNomeouDataTrazendoUsuario(nomeEvento, dataInicio, datafim);
             try
             {
                 if (resultado != null)
                     return Ok(resultado);
                 else
-                    return BadRequest();
+                    return NotFound();
             }
             catch (Exception e)
             {
@@ -166,7 +168,7 @@ namespace TCC.Controllers
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest("Insira um RM válido.");
                 }
             }
             catch(Exception e)
