@@ -22,7 +22,7 @@ namespace TCC.Services
                     new Claim(ClaimTypes.Role, user.Perfil.ToString())
                 }),
 
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddHours(4),
                     SigningCredentials = 
                     new SigningCredentials(
                         new SymmetricSecurityKey(key),

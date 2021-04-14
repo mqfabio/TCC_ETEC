@@ -44,7 +44,7 @@ namespace TCC.Models
 
         public async Task<bool> Cadastrar(Usuario servidor)
         {
-            var resultado = await _usuarioRepositorio.Cdastrar(servidor);
+            var resultado = await _usuarioRepositorio.Cadastrar(servidor);
             return resultado;
         }
 

@@ -21,7 +21,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var query = @"INSERT INTO [dbo].[evento]
                                 ( nome ,descricao ,dataEvento, statusEvento)
@@ -42,7 +42,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var query = @"UPDATE [dbo].[evento] set
                                         nome = @nome ,
@@ -65,7 +65,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var param = new { id = id };
 
@@ -87,7 +87,7 @@ namespace TCC.Data
         {
             try
             {                         
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var query = @"select  idEvento, nome, descricao, dataEvento, statusEvento from evento Where Nome = @nome";
 
@@ -108,7 +108,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var query = @"select  idEvento, nome, descricao, dataEvento, statusEvento from evento";
                     var resultado = await conexao.QueryAsync<Evento>(query);
@@ -126,7 +126,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                     {
                     var param = new { nomeEvento = nomeEvento, dataInicio = dataInicio, datafim = datafim};
                     var query = @"select 
@@ -175,7 +175,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var param = new { rm = rm };
                     var query = @"select 

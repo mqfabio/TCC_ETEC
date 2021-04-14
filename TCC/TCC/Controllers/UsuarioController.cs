@@ -10,7 +10,7 @@ using TCC.Services;
 
 namespace TCC.Controllers
 {
-    [Authorize]
+
     [ApiController]
     [Route("Usuario")]
     public class UsuarioController : ControllerBase
@@ -70,7 +70,6 @@ namespace TCC.Controllers
 
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IActionResult> Buscartodos()
         {
             var resultado = await _usuario.BuscarTodos();

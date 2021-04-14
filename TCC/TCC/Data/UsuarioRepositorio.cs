@@ -43,7 +43,6 @@ namespace TCC.Data
                     var param = new { email = email};
                     conexao.Open();
                     var resultado = await conexao.QueryAsync<Usuario>(query, param);
-                    var resultado2 = resultado.FirstOrDefault();
 
                     return resultado.FirstOrDefault();
 
@@ -94,7 +93,7 @@ namespace TCC.Data
             }
         }
 
-        public async Task<bool> Cdastrar(Usuario servidor)
+        public async Task<bool> Cadastrar(Usuario usuario)
         {
             try
             {
@@ -105,9 +104,16 @@ namespace TCC.Data
                             Values
                                 (@Senha, @CodUE, @RM, @CPF, @RG, @DataNascimento, @NomeUsuario, @email,@StatusUsuario, @Perfil, @Titulacao, @cargo)";
 
-                    var resultado = await conexao.ExecuteAsync(query, servidor, commandType: CommandType.Text);
-                    Console.WriteLine(resultado);
-                    return resultado == 1;
+                    var validacao = await BuscarPorEmail(usuario.Email);
+                    if (validacao == null)
+                    {
+                        var resultado = await conexao.ExecuteAsync(query, usuario, commandType: CommandType.Text);
+                        return resultado == 1;
+                    }
+
+                    return false;
+
+                    
                 }
             }
             catch (Exception e)
@@ -141,7 +147,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var query = @"UPDATE [dbo].[usuario] set
                                 senha = @senha, 
@@ -172,7 +178,7 @@ namespace TCC.Data
 public interface IUsuarioRepositorio 
 {
     //Task<bool> AlterarAsync(Servidor servidor);
-    Task<bool> Cdastrar(Usuario servidor);
+    Task<bool> Cadastrar(Usuario servidor);
     Task<IEnumerable<Usuario>> BuscarTodos();
     Task<Usuario> BuscarPorEmailESenha(string nome, string senha);
     Task<bool> Alterar(Usuario usuario);
