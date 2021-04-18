@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TCC.Data;
 using TCC.Enums;
+using TCC.Interfaces;
 
 namespace TCC.Models
 {
@@ -42,9 +43,9 @@ namespace TCC.Models
         //    return resultado;
         //}
 
-        public async Task<bool> Cadastrar(Usuario servidor)
+        public async Task<bool> Cadastrar(Usuario usuario)
         {
-            var resultado = await _usuarioRepositorio.Cadastrar(servidor);
+            var resultado = await _usuarioRepositorio.Cadastrar(usuario);
             return resultado;
         }
 
@@ -78,16 +79,5 @@ namespace TCC.Models
             return resultado;
         }
 
-    }
-
-    public interface IUsuario
-    {
-        Task<bool> Cadastrar(Usuario servidor);
-        //Task<bool> AlterarAsync(Servidor servidor);
-        Task<bool> Inativar(int idServidor);
-        Task<IEnumerable<Usuario>> BuscarTodos();
-        Task<Usuario> PegarPeloEmailSenha(string email, string senha);
-        Task<bool> Alterar(Usuario idUsuario);
-        Task<Usuario> PegarPeloEmail(string email);
     }
 }

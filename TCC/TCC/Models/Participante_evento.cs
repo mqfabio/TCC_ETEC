@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TCC.Data;
-
+using TCC.Interfaces;
 
 namespace TCC.Models
 {
@@ -30,8 +30,17 @@ namespace TCC.Models
 
         public async Task<bool> CadastrarAsync(Participante_evento pe)
         {
-            var resultado = await _participanteEventoRepositorio.Cadastrar(pe);
-            return resultado;
+            return await _participanteEventoRepositorio.Cadastrar(pe);  
+        }
+
+        public async Task<Participante_evento> BuscarPeloUsuario(int idUsuario, int idEvento)
+        {
+            return await _participanteEventoRepositorio.BuscarPeloUsuario(idUsuario, idEvento);
+        }
+
+        public async Task<bool> Deletar(int idUsuario, int idevento)
+        {
+            return await _participanteEventoRepositorio.Deletar(idUsuario, idevento);
         }
 
 
@@ -40,5 +49,7 @@ namespace TCC.Models
     public interface IParticipante_evento
     {
         Task<bool> CadastrarAsync(Participante_evento pe);
+        Task<Participante_evento> BuscarPeloUsuario(int idUsuario, int idEvento);
+        Task<bool> Deletar(int idUsuario, int idevento);
     }
 }

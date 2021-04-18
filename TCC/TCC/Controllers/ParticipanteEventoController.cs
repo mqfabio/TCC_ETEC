@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using TCC.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 
 
 namespace TCC.Controllers
@@ -39,12 +36,48 @@ namespace TCC.Controllers
                 }
                 else
                 {
-                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "O usuário ja esta cadastrado nesse evento.");
                 }
             }
             catch(Exception e)
             {
                 return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro inesperado. Entre em contato com o administrador.");
+            }
+            throw new NotImplementedException();
+        }
+
+
+        //[HttpGet("{idUsuario}/{idEvento}")]
+        public async Task<IActionResult> BuscarPeloUsuario(int idUsuario, int idEvento)
+        {
+            var resultado = await _participante_Evento.BuscarPeloUsuario(idUsuario, idEvento);
+            try
+            {
+                if (resultado != null)
+                    return Ok(resultado);
+                else
+                    return NotFound();
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpDelete("{idUsuario}/{idEvento}")]
+        public async Task<IActionResult> Deletar(int idUsuario, int idEvento)
+        {
+            var resultado = await _participante_Evento.Deletar(idUsuario, idEvento);
+            try
+            {
+                if (resultado)
+                    return StatusCode(HttpStatusCode.OK.GetHashCode());
+                else
+                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Não foi excluido.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
             }
             throw new NotImplementedException();
         }

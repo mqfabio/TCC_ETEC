@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using TCC.DTO;
+using TCC.Interfaces;
 using TCC.Models;
 
 namespace TCC.Data
@@ -21,7 +22,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(local))
                 {
                     var query = @"INSERT INTO [dbo].[evento]
                                 ( nome ,descricao ,dataEvento, statusEvento)
@@ -42,7 +43,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(local))
                 {
                     var query = @"UPDATE [dbo].[evento] set
                                         nome = @nome ,
@@ -65,7 +66,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(local))
                 {
                     var param = new { id = id };
 
@@ -87,7 +88,7 @@ namespace TCC.Data
         {
             try
             {                         
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(local))
                 {
                     var query = @"select  idEvento, nome, descricao, dataEvento, statusEvento from evento Where Nome = @nome";
 
@@ -108,7 +109,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(local))
                 {
                     var query = @"select  idEvento, nome, descricao, dataEvento, statusEvento from evento";
                     var resultado = await conexao.QueryAsync<Evento>(query);
@@ -126,7 +127,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(local))
                     {
                     var param = new { nomeEvento = nomeEvento, dataInicio = dataInicio, datafim = datafim};
                     var query = @"select 
@@ -149,16 +150,19 @@ namespace TCC.Data
 
                     var listaRetorno = new List<EventoComUsuariosParticipantes>();
                     var resultadoAgrupadoPorCurso = resultado.GroupBy(x => x.IdEvento).OrderBy(x => x.Key).ToList();
-                    resultadoAgrupadoPorCurso.ForEach(evento =>
+                    resultadoAgrupadoPorCurso.ForEach((Action<IGrouping<int, EventoDoUsuarioDTO>>)(evento =>
                     {
                         listaRetorno.Add(new EventoComUsuariosParticipantes
-                        {                         
+                        {
                             IdEvento = evento.Key,
                             Nome = evento.Select(x => x.Nome).FirstOrDefault(),
-                            NomeUsuarios = evento.Select(x => x.NomeUsuario).ToList()
+                            Descricao = evento.Select(x => x.Descricao).FirstOrDefault(),
+                            Participantes = evento.Select(x => x.NomeUsuario).ToList(),
+                            DataEvento = evento.Select(x => x.DataEvento).FirstOrDefault(),
+                            StatusEvento = evento.Select(x => x.StatusEvento).FirstOrDefault()
                         }
                         );                       
-                    });
+                    }));
 
 
                     return listaRetorno;
@@ -175,7 +179,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(local))
                 {
                     var param = new { rm = rm };
                     var query = @"select 
@@ -204,23 +208,5 @@ namespace TCC.Data
             }
         }
  
-    }
-
-
-    public interface IEventoRepositorio
-    {
-        Task<bool> Cadastrar(Evento evento);
-
-        Task<bool> Deletar(int id);
-
-        Task<Evento> BuscarPorNome(string nome);
-
-        Task<IEnumerable<Evento>> BuscarTodos();
-
-        Task<bool> AlterarAsync(Evento evento);
-
-        Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuario(string nomeEvento, DateTime dataInicio, DateTime datafim);
-
-        Task<IEnumerable<Evento>> BuscarPeloRm(int rm);
     }
 }

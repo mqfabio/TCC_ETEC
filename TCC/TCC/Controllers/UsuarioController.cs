@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
 using TCC.DTO;
+using TCC.Interfaces;
 using TCC.Models;
 using TCC.Services;
 
@@ -46,9 +47,9 @@ namespace TCC.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Cadastrar(Usuario servidor)
+        public async Task<IActionResult> Cadastrar(Usuario usuario)
         {
-            var resultado = await _usuario.Cadastrar(servidor);
+            var resultado = await _usuario.Cadastrar(usuario);
             try
             {
                 if (resultado)
@@ -57,7 +58,7 @@ namespace TCC.Controllers
                 }
                 else
                 {
-                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Usuario existente!");
                 }
             }
             catch (Exception e)

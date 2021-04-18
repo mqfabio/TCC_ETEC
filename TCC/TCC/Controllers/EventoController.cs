@@ -6,11 +6,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
 using TCC.DTO;
+using TCC.Interfaces;
 using TCC.Models;
 
 namespace TCC.Controllers
 {
-    [Authorize]
+    
     [ApiController]
     [Route("evento")]
     public class EventoController : ControllerBase
@@ -140,7 +141,7 @@ namespace TCC.Controllers
         }
 
         [HttpGet("{nomeEvento}/{dataInicio:DateTime}/{datafim}")]
-        public async Task<ActionResult<List<EventoComUsuariosParticipantes>>> BuscarEventosPeloNomeouDataTrazendoUsuario(string nomeEvento, DateTime dataInicio, DateTime datafim)
+        public async Task<ActionResult<List<Evento>>> BuscarEventosPeloNomeouDataTrazendoUsuario(string nomeEvento, DateTime dataInicio, DateTime datafim)
         {
             var resultado = await _evento.BuscarEventosPeloNomeouDataTrazendoUsuario(nomeEvento, dataInicio, datafim);
             try
@@ -168,7 +169,7 @@ namespace TCC.Controllers
                 }
                 else
                 {
-                    return BadRequest("Insira um RM válido.");
+                    return NotFound("Insira um RM válido.");
                 }
             }
             catch(Exception e)

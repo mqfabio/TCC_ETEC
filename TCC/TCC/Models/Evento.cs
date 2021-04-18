@@ -1,30 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TCC.Data;
-using TCC.DTO;
 using TCC.Enums;
+using TCC.Interfaces;
 
 namespace TCC.Models
 {
     public class Evento : IEvento
     {
         public int IdEvento { get; set; }
-        //public int IdServidor { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public DateTime DataEvento { get; set; }
         public StatusEventoEnum StatusEvento { get; set; }
+        public List<string> Participantes { get; set; }
 
-        /*[JsonIgnore]
-        public DateTime HoraDb { get; set; }
 
-        public string Hora { get => HoraDb.ToString("HH:mm"); }
-        public string NomeServidor { get; set; }
-        public string RG { get; set; }*/
-
-       
 
 
 
@@ -40,15 +32,14 @@ namespace TCC.Models
         {
 
         }
-        public Evento(string nome, string descricao, DateTime data_evento, string nomeServidor, StatusEventoEnum statusEvento)
+        public Evento(string nome, string descricao, DateTime data_evento, string nomeServidor, StatusEventoEnum statusEvento, List<String> participantes)
         {
             
             Nome = nome;
             Descricao = descricao;
             DataEvento = data_evento;
             StatusEvento = statusEvento;
-
-            
+            Participantes = participantes;
         }
 
         public async Task<bool> Cadastrar(Evento evento)
@@ -93,25 +84,5 @@ namespace TCC.Models
             var resultado = await _eventoRepositorio.BuscarPeloRm(rm);
             return resultado;
         }
-    }
-
-
-
-    public interface IEvento
-    {
-        Task<bool> Cadastrar(Evento evento);
-        Task<bool> Alterar(Evento evento);
-        Task<bool> Excluir(int idEvento);
-        Task<Evento> PegarPeloNome(string nome);
-        Task<IEnumerable<Evento>> BuscarTodos();
-        Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuario(string nomeEvento, DateTime dataInicio, DateTime datafim);
-        Task<IEnumerable<Evento>> BuscarPeloRm(int rm);
-
-
-
-
-        //IEnumerable<Evento> ConsultarInformacoes();
-        //IEnumerable<Servidor> ConsultarParticipacoesEvento(int idEvento);
-        //IEnumerable<Requisicao> ConsultarRequisicoes();
     }
 }
