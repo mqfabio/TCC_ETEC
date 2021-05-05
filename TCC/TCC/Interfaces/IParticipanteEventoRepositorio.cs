@@ -8,8 +8,8 @@ namespace TCC.Interfaces
 {
     public interface IParticipanteEventoRepositorio
     {
-        Task<bool> Cadastrar(Participante_evento pe);
-        Task<Participante_evento> BuscarPeloUsuario(int idUsuario, int idEvento);
-        Task<bool> Deletar(int idUsuario, int idEvento);
+        Task<bool> CadastrarAsync(Participante_evento pe);
+        Task<Participante_evento> BuscarPeloUsuarioAsync(int idUsuario, int idEvento);
+        Task<bool> DeletarAsync(int idUsuario, int idEvento);
     }
 }

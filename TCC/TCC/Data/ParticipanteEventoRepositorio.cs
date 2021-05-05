@@ -15,17 +15,17 @@ namespace TCC.Data
         string local = "Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True";
         string somee = "workstation id=TccEtec.mssql.somee.com;packet size = 4096; user id = Giselle_SQLLogin_1; pwd=a7autn81ou;data source = TccEtec.mssql.somee.com; persist security info=False;initial catalog = TccEtec";
 
-        public async Task<bool> Cadastrar(Participante_evento pe)
+        public async Task<bool> CadastrarAsync(Participante_evento pe)
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var query = @"INSERT INTO [dbo].[participante_evento]
                             (idEvento, idUsuario)
                         values
                             (@IdEvento, @IdUsuario)";
-                    var validacao = await BuscarPeloUsuario(pe.IdUsuario, pe.IdEvento);
+                    var validacao = await BuscarPeloUsuarioAsync(pe.IdUsuario, pe.IdEvento);
 
                     if(validacao != null) 
                     {
@@ -49,11 +49,11 @@ namespace TCC.Data
             
         }
 
-        public async Task<Participante_evento> BuscarPeloUsuario(int idUsuario, int idEvento)
+        public async Task<Participante_evento> BuscarPeloUsuarioAsync(int idUsuario, int idEvento)
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
                     var query = @"SELECT idUsuario, idEvento from participante_evento WHERE idUsuario = @idUsuario and idEvento = @idEvento";
 
@@ -73,11 +73,11 @@ namespace TCC.Data
         }
 
 
-        public async Task<bool> Deletar(int idUsuario, int idEvento)
+        public async Task<bool> DeletarAsync(int idUsuario, int idEvento)
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(somee))
                 {
 
                     var param = new { idUsuario = idUsuario, idEvento = idEvento };

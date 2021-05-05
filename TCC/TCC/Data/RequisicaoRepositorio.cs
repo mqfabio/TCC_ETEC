@@ -12,9 +12,7 @@ namespace TCC.Data
     public class RequisicaoRepositorio : IRequisicaoRepositorio
     {
 
-        string local = "Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True";
-        string somee = "workstation id=TccEtec.mssql.somee.com;packet size = 4096; user id = Giselle_SQLLogin_1; pwd=a7autn81ou;data source = TccEtec.mssql.somee.com; persist security info=False;initial catalog = TccEtec";
-
+        
         public async Task<IEnumerable<Requisicao>> BuscarTodos()
         {
             try
@@ -63,7 +61,7 @@ namespace TCC.Data
         public async Task<Requisicao> BuscarPorUsuario(string email)
         {
             Usuario usuario = new Usuario();
-            var user = usuario.PegarPeloEmail(email);
+            var user = usuario.PegarPeloEmailAsync(email);
             var idUsuario = user.Id;
             try
             {                           //Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;

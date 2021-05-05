@@ -16,7 +16,7 @@ namespace TCC.Data
         string somee = "workstation id=TccEtec.mssql.somee.com;packet size = 4096; user id = Giselle_SQLLogin_1; pwd=a7autn81ou;data source = TccEtec.mssql.somee.com; persist security info=False;initial catalog = TccEtec";
 
      
-        public async Task<Usuario> BuscarPorEmail(string email)
+        public async Task<Usuario> BuscarPorEmailAsync(string email)
         {
            
             try
@@ -55,37 +55,44 @@ namespace TCC.Data
             }
         }
 
-        public async Task<Usuario> BuscarPorEmailESenha(string email, string senha)
+        public async Task<Usuario> BuscarPorEmailESenhaAsync(string email, string senha)
         {
             try
             {
                 using (var conexao = new SqlConnection(local))
                 {
-                    var query = @"select  
-                                        idUsuario, 
-                                        senha, 
-                                        codUE, 
-                                        RM, 
-                                        CPF, 
-                                        RG, 
-                                        dataNascimento, 
-                                        nomeUsuario, 
-                                        email, 
-                                        statusUsuario, 
-                                        perfil, 
-                                        titulacao, 
-                                        cargo 
-                                from 
-                                        usuario 
-                                Where senha = @senha and email = @email and statusUsuario = 0 ";
+                    var resultado2 = await BuscarPorEmailAsync(email);
+                    //var query = @"select  
+                    //                    idUsuario, 
+                    //                    senha, 
+                    //                    codUE, 
+                    //                    RM, 
+                    //                    CPF, 
+                    //                    RG, 
+                    //                    dataNascimento, 
+                    //                    nomeUsuario, 
+                    //                    email, 
+                    //                    statusUsuario, 
+                    //                    perfil, 
+                    //                    titulacao, 
+                    //                    cargo 
+                    //            from 
+                    //                    usuario 
+                    //            Where senha = @senha and email = @email and statusUsuario = 0 ";
 
-                    var param = new { email = email, senha = senha };
-                    conexao.Open();
-                    var resultado = await conexao.QueryAsync<Usuario>(query, param);
-                    var resultado2 = resultado.FirstOrDefault();
+                    //var param = new { email = email};
+                    //conexao.Open();
+                    //var resultado = await conexao.QueryAsync<Usuario>(query, param);
 
-                    return resultado.FirstOrDefault();
+                    //var resultado2 = resultado.FirstOrDefault();
 
+                    bool senhaValida = BCrypt.Net.BCrypt.Verify(senha, resultado2.Senha);
+
+                    if (senhaValida)
+                    {
+                        return resultado2;  
+                    }
+                    return null;
                 }
             }
             catch (Exception e)
@@ -94,7 +101,7 @@ namespace TCC.Data
             }
         }
 
-        public async Task<bool> Cadastrar(Usuario usuario)
+        public async Task<bool> CadastrarAsync(Usuario usuario)
         {
             try
             {
@@ -105,7 +112,10 @@ namespace TCC.Data
                             Values
                                 (@Senha, @CodUE, @RM, @CPF, @RG, @DataNascimento, @NomeUsuario, @email,@StatusUsuario, @Perfil, @Titulacao, @cargo)";
 
-                    var validacao = await BuscarPorEmail(usuario.Email);
+                    var validacao = await BuscarPorEmailAsync(usuario.Email);
+
+                    usuario.Senha = BCrypt.Net.BCrypt.HashPassword(usuario.Senha);
+
                     if (validacao == null)
                     {
                         var resultado = await conexao.ExecuteAsync(query, usuario, commandType: CommandType.Text);
@@ -124,7 +134,7 @@ namespace TCC.Data
 
         }
 
-        public async Task<IEnumerable<Usuario>> BuscarTodos()
+        public async Task<IEnumerable<Usuario>> BuscarTodosAsync()
         {
             try
             {
@@ -144,11 +154,11 @@ namespace TCC.Data
         }
 
 
-        public async Task<bool> Alterar(Usuario usuario)
+        public async Task<bool> AlterarAsync(Usuario usuario)
         {
             try
             {
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(local))
                 {
                     var query = @"UPDATE [dbo].[usuario] set
                                 senha = @senha, 
@@ -164,7 +174,10 @@ namespace TCC.Data
                                 perfil = @perfil
                             WHERE idUSuario = @idUsuario";
 
+                    usuario.Senha = BCrypt.Net.BCrypt.HashPassword(usuario.Senha);
+
                     var resultado = await conexao.ExecuteAsync(query, usuario, commandType: CommandType.Text);
+                    
 
                     return resultado == 1;
                 }
@@ -172,6 +185,84 @@ namespace TCC.Data
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<Usuario> BuscarPorRMAsync(int rm)
+        {
+
+            try
+            {
+                using (var conexao = new SqlConnection(local))
+                {
+                    var query = @"select  
+                                        idUsuario, 
+                                        senha, 
+                                        codUE, 
+                                        RM, 
+                                        CPF, 
+                                        RG, 
+                                        dataNascimento, 
+                                        nomeUsuario, 
+                                        email, 
+                                        statusUsuario, 
+                                        perfil, 
+                                        titulacao, 
+                                        cargo 
+                                from 
+                                    usuario 
+                                Where RM = @rm and statusUsuario = 0 ";
+
+                    var param = new { RM = rm };
+                    conexao.Open();
+                    var resultado = await conexao.QueryAsync<Usuario>(query, param);
+
+                    return resultado.FirstOrDefault();
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public async Task<Usuario> BuscarPeloNomeAsync(string nome)
+        {
+
+            try
+            {
+                using (var conexao = new SqlConnection(local))
+                {
+                    var query = @"select  
+                                        idUsuario, 
+                                        senha, 
+                                        codUE, 
+                                        RM, 
+                                        CPF, 
+                                        RG, 
+                                        dataNascimento, 
+                                        nomeUsuario, 
+                                        email, 
+                                        statusUsuario, 
+                                        perfil, 
+                                        titulacao, 
+                                        cargo 
+                                from 
+                                    usuario 
+                                Where nomeUsuario = @nome and statusUsuario = 0 ";
+
+                    var param = new { nome = nome };
+                    conexao.Open();
+                    var resultado = await conexao.QueryAsync<Usuario>(query, param);
+
+                    return resultado.FirstOrDefault();
+
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
             }
         }
     }

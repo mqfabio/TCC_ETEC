@@ -8,12 +8,14 @@ namespace TCC.Interfaces
 {
     public interface IUsuario
     {
-        Task<bool> Cadastrar(Usuario servidor);
+        Task<bool> CadastrarAsync(Usuario servidor);
         //Task<bool> AlterarAsync(Servidor servidor);
         Task<bool> Inativar(int idServidor);
-        Task<IEnumerable<Usuario>> BuscarTodos();
-        Task<Usuario> PegarPeloEmailSenha(string email, string senha);
-        Task<bool> Alterar(Usuario idUsuario);
-        Task<Usuario> PegarPeloEmail(string email);
+        Task<IEnumerable<Usuario>> BuscarTodosAsync();
+        Task<Usuario> PegarPeloEmailSenhaAsync(string email, string senha);
+        Task<bool> AlterarAsync(Usuario idUsuario);
+        Task<Usuario> PegarPeloEmailAsync(string email);
+        Task<Usuario> PegarPeloRMAsync(int rm);
+        Task<Usuario> PegarPeloNomeAsync(string nome);
     }
 }

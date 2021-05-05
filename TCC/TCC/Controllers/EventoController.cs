@@ -11,7 +11,7 @@ using TCC.Models;
 
 namespace TCC.Controllers
 {
-    
+    [Authorize]
     [ApiController]
     [Route("evento")]
     public class EventoController : ControllerBase
@@ -26,9 +26,9 @@ namespace TCC.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Cadastrar([Required][FromBody] Evento evento)
+        public async Task<IActionResult> CadastrarAsync([Required][FromBody] Evento evento)
         {
-            var resultado = await _evento.Cadastrar(evento);
+            var resultado = await _evento.CadastrarAsync(evento);
 
             try
             {
@@ -50,11 +50,11 @@ namespace TCC.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpPut("id/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Alterar([Required][FromBody] Evento evento)
+        public async Task<IActionResult> AlterarAsync([Required][FromBody] Evento evento)
         {
-            var resultado = await _evento.Alterar(evento);
+            var resultado = await _evento.AlterarAsync(evento);
             try
             {
                 if (resultado)
@@ -75,11 +75,11 @@ namespace TCC.Controllers
             throw new NotImplementedException();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("id/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Excluir(int id)
+        public async Task<IActionResult> ExcluirAsync(int id)
         {
-            var resultado = await _evento.Excluir(id);
+            var resultado = await _evento.ExcluirAsync(id);
             try
             {
                 if (resultado)
@@ -99,10 +99,10 @@ namespace TCC.Controllers
             throw new NotImplementedException();
         }
 
-        //[HttpGet("{nome}")]
-        public async Task<IActionResult> PegarPeloNome(string nome)
+        [HttpGet("nome/{nome}")]
+        public async Task<IActionResult> PegarPeloNomeAsync(string nome)
         {
-            var resultado = await _evento.PegarPeloNome(nome);
+            var resultado = await _evento.PegarPeloNomeAsync(nome);
             try
             {
                 if (resultado != null)
@@ -122,10 +122,12 @@ namespace TCC.Controllers
             throw new NotImplementedException();
         }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<IActionResult> BuscarTodos()
+        public async Task<IActionResult> BuscarTodosAsync()
         {
-            var resultado = await _evento.BuscarTodos();
+            var resultado = await _evento.BuscarTodosAsync();
             try
             {
                 if (resultado != null)
@@ -140,10 +142,12 @@ namespace TCC.Controllers
             }
         }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpGet("{nomeEvento}/{dataInicio:DateTime}/{datafim}")]
-        public async Task<ActionResult<List<Evento>>> BuscarEventosPeloNomeouDataTrazendoUsuario(string nomeEvento, DateTime dataInicio, DateTime datafim)
+        public async Task<ActionResult<List<Evento>>> BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(string nomeEvento, DateTime dataInicio, DateTime datafim)
         {
-            var resultado = await _evento.BuscarEventosPeloNomeouDataTrazendoUsuario(nomeEvento, dataInicio, datafim);
+            var resultado = await _evento.BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(nomeEvento, dataInicio, datafim);
             try
             {
                 if (resultado != null)
@@ -157,10 +161,12 @@ namespace TCC.Controllers
             }
         }
 
-        [HttpGet("{rm}")]
-        public async Task<IActionResult> BuscarPeloRm(int rm)
+
+
+        [HttpGet("rm/{rm}")]
+        public async Task<IActionResult> BuscarPeloRmAsync(int rm)
         {
-            var resultado = await _evento.BuscarPeloRm(rm);
+            var resultado = await _evento.BuscarPeloRmAsync(rm);
             try
             {
                 if(resultado != null)
@@ -177,5 +183,25 @@ namespace TCC.Controllers
                 throw new Exception(e.Message);
             }
         }
+
+
+        [HttpGet("data/{dataInicio}/{dataFim}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> BuscarPeloNomeOuData(DateTime dataInicio, DateTime dataFim)
+        {
+            var resultado = await _evento.BuscarPorNomeOuData(dataInicio, dataFim);
+            try
+            {
+                if (resultado != null)
+                    return Ok(resultado);
+                else
+                    return NotFound("Evento nao encontrado!");
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
     }
 }

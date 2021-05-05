@@ -14,7 +14,7 @@ namespace TCC.Models
         public string Descricao { get; set; }
         public DateTime DataEvento { get; set; }
         public StatusEventoEnum StatusEvento { get; set; }
-        public List<string> Participantes { get; set; }
+        
 
 
 
@@ -32,56 +32,61 @@ namespace TCC.Models
         {
 
         }
-        public Evento(string nome, string descricao, DateTime data_evento, string nomeServidor, StatusEventoEnum statusEvento, List<String> participantes)
+        public Evento(string nome, string descricao, DateTime data_evento, string nomeServidor, StatusEventoEnum statusEvento)
         {
             
             Nome = nome;
             Descricao = descricao;
             DataEvento = data_evento;
             StatusEvento = statusEvento;
-            Participantes = participantes;
         }
 
-        public async Task<bool> Cadastrar(Evento evento)
+        public async Task<bool> CadastrarAsync(Evento evento)
         {
-            var resultado = await _eventoRepositorio.Cadastrar(evento);
+            var resultado = await _eventoRepositorio.CadastrarAsync(evento);
 
             return resultado;
         }
 
-        public async Task<bool> Alterar(Evento evento)
+        public async Task<bool> AlterarAsync(Evento evento)
         {
             var resultado = await _eventoRepositorio.AlterarAsync(evento);
             return resultado;
         }
 
-        public async Task<bool> Excluir(int idEvento)
+        public async Task<bool> ExcluirAsync(int idEvento)
         {
-            var resultado = await _eventoRepositorio.Deletar(idEvento);
+            var resultado = await _eventoRepositorio.DeletarAsync(idEvento);
             return resultado;
         }
 
-        public async Task<Evento> PegarPeloNome(string nome)
+        public async Task<Evento> PegarPeloNomeAsync(string nome)
         {
-            var resultado = await _eventoRepositorio.BuscarPorNome(nome);
+            var resultado = await _eventoRepositorio.BuscarPorNomeAsync(nome);
             return resultado;
         }
 
-        public async Task<IEnumerable<Evento>> BuscarTodos()
+        public async Task<IEnumerable<Evento>> BuscarTodosAsync()
         {
-            var resultado = await _eventoRepositorio.BuscarTodos();
+            var resultado = await _eventoRepositorio.BuscarTodosAsync();
             return resultado;
         }
 
-        public async Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuario(string nomeEvento, DateTime dataInicio, DateTime datafim)
+        public async Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(string nomeEvento, DateTime dataInicio, DateTime datafim)
         {
-            var resultado = await _eventoRepositorio.BuscarEventosPeloNomeouDataTrazendoUsuario(nomeEvento, dataInicio, datafim);
+            var resultado = await _eventoRepositorio.BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(nomeEvento, dataInicio, datafim);
             return resultado;
         }
 
-        public async Task<IEnumerable<Evento>> BuscarPeloRm(int rm)
+        public async Task<IEnumerable<Evento>> BuscarPeloRmAsync(int rm)
         {
-            var resultado = await _eventoRepositorio.BuscarPeloRm(rm);
+            var resultado = await _eventoRepositorio.BuscarPeloRmAsync(rm);
+            return resultado;
+        }
+
+        public async Task<IEnumerable<Evento>> BuscarPorNomeOuData(DateTime dataInicio, DateTime dataFim)
+        {
+            var resultado = await _eventoRepositorio.BuscarPelaDataAsync(dataInicio, dataFim);
             return resultado;
         }
     }

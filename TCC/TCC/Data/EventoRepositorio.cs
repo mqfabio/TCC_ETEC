@@ -18,7 +18,7 @@ namespace TCC.Data
         string somee = "workstation id=TccEtec.mssql.somee.com;packet size = 4096; user id = Giselle_SQLLogin_1; pwd=a7autn81ou;data source = TccEtec.mssql.somee.com; persist security info=False;initial catalog = TccEtec";
         
         
-        public async Task<bool> Cadastrar(Evento evento)
+        public async Task<bool> CadastrarAsync(Evento evento)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace TCC.Data
             }
         }
 
-        public async Task<bool> Deletar(int id)
+        public async Task<bool> DeletarAsync(int id)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace TCC.Data
             
         }
 
-        public async Task<Evento> BuscarPorNome(string nome)
+        public async Task<Evento> BuscarPorNomeAsync(string nome)
         {
             try
             {                         
@@ -105,7 +105,31 @@ namespace TCC.Data
             }
         }
 
-        public async Task<IEnumerable<Evento>> BuscarTodos()
+
+        public async Task<IEnumerable<Evento>> BuscarPelaDataAsync(DateTime dataInicio, DateTime dataFim)
+        {
+            try
+            {
+                using (var conexao = new SqlConnection(local))
+                {
+                    var query = @"select  idEvento, nome, descricao, dataEvento, statusEvento from evento Where  format(DataEvento,'yyyy-MM-dd')  
+                                                                      between format(@dataInicio,'yyyy-MM-dd') and format(@dataFim,'yyyy-MM-dd')";
+
+                    var param = new { dataInicio = dataInicio, dataFim = dataFim};
+                    conexao.Open();
+                    var resultado = await conexao.QueryAsync<Evento>(query, param);
+
+                    return resultado;
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+
+        public async Task<IEnumerable<Evento>> BuscarTodosAsync()
         {
             try
             {
@@ -123,7 +147,7 @@ namespace TCC.Data
             }
         }
 
-        public async Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuario(string nomeEvento, DateTime dataInicio, DateTime datafim)
+        public async Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(string nomeEvento, DateTime dataInicio, DateTime datafim)
         {
             try
             {
@@ -175,7 +199,7 @@ namespace TCC.Data
         }
 
 
-        public async Task<IEnumerable<Evento>> BuscarPeloRm(int rm)
+        public async Task<IEnumerable<Evento>> BuscarPeloRmAsync(int rm)
         {
             try
             {

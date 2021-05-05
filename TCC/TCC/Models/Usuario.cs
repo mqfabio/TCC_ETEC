@@ -43,9 +43,9 @@ namespace TCC.Models
         //    return resultado;
         //}
 
-        public async Task<bool> Cadastrar(Usuario usuario)
+        public async Task<bool> CadastrarAsync(Usuario usuario)
         {
-            var resultado = await _usuarioRepositorio.Cadastrar(usuario);
+            var resultado = await _usuarioRepositorio.CadastrarAsync(usuario);
             return resultado;
         }
 
@@ -54,28 +54,40 @@ namespace TCC.Models
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Usuario>> BuscarTodos()
+        public async Task<IEnumerable<Usuario>> BuscarTodosAsync()
         {
-            var resultado = await _usuarioRepositorio.BuscarTodos();
+            var resultado = await _usuarioRepositorio.BuscarTodosAsync();
             return resultado;
         }
 
-        public async Task<Usuario> PegarPeloEmailSenha(string email, string senha)
+        public async Task<Usuario> PegarPeloEmailSenhaAsync(string email, string senha)
         {
-            var resultado = await _usuarioRepositorio.BuscarPorEmailESenha(email, senha);
+            var resultado = await _usuarioRepositorio.BuscarPorEmailESenhaAsync(email, senha);
             return resultado;
         }
 
-        public async Task<Usuario> PegarPeloEmail(string email)
+        public async Task<Usuario> PegarPeloEmailAsync(string email)
         {
-            var resultado = await _usuarioRepositorio.BuscarPorEmail(email);
+            var resultado = await _usuarioRepositorio.BuscarPorEmailAsync(email);
             return resultado;
         }
 
 
-        public async Task<bool> Alterar(Usuario usuario)
+        public async Task<bool> AlterarAsync(Usuario usuario)
         {
-            var resultado = await _usuarioRepositorio.Alterar(usuario);
+            var resultado = await _usuarioRepositorio.AlterarAsync(usuario);
+            return resultado;
+        }
+
+        public async Task<Usuario> PegarPeloRMAsync(int rm)
+        {
+            var resultado = await _usuarioRepositorio.BuscarPorRMAsync(rm);
+            return resultado;
+        }
+
+        public async Task<Usuario> PegarPeloNomeAsync(string nome)
+        {
+            var resultado = await _usuarioRepositorio.BuscarPeloNomeAsync(nome);
             return resultado;
         }
 

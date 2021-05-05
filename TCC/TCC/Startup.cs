@@ -24,9 +24,14 @@ namespace TCC
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options => 
-                options.AddDefaultPolicy(
-                    builder => builder.AllowAnyOrigin()));
+            
+            services.AddCors(options => options.AddPolicy("AllowAll", builder =>
+            {
+                builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+            }));
            
             services.AddControllers();
 
@@ -49,8 +54,7 @@ namespace TCC
                 };
             });
 
-            //services.AddSingleton<IExcluido, Excluido>();
-            //services.AddSingleton<IExcluidoRepositorio, ExcluidoRepositorio>();
+           
             services.AddSingleton<IEvento, Evento>();
             services.AddSingleton<IEventoRepositorio, EventoRepositorio>();
             services.AddSingleton<IUsuario, Usuario>();
@@ -84,16 +88,12 @@ namespace TCC
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("AllowAll");
+          
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseCors();
-            //app.UseCors(x => x
-            //    .AllowAnyOrigin()
-            //    .AllowAnyMethod()
-            //    .AllowAnyHeader());
-
+            
             app.UseAuthentication();
             app.UseAuthorization();
 

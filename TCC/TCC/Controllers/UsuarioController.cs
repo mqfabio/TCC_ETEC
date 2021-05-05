@@ -11,7 +11,7 @@ using TCC.Services;
 
 namespace TCC.Controllers
 {
-
+    [Authorize]
     [ApiController]
     [Route("Usuario")]
     public class UsuarioController : ControllerBase
@@ -27,18 +27,19 @@ namespace TCC.Controllers
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ActionResult<LoginDoUsuarioDTO>> AutenticaçãoDoUsuario([FromBody] Usuario model)
+        public async Task<ActionResult<LoginDoUsuarioDTO>> AutenticaçãoDoUsuarioAsync([FromBody] Usuario model)
         {
-            var usuario = await _usuario.PegarPeloEmailSenha(model.Email, model.Senha);
+            var usuario = await _usuario.PegarPeloEmailSenhaAsync(model.Email, model.Senha);
 
             if(usuario == null)
                 return BadRequest("Usuário ou senha inválidos");
-
+            
             var token = TokenService.GenerateToken(usuario);
             usuario.Senha = "";
             return new LoginDoUsuarioDTO
             {
                 Nome = usuario.NomeUsuario,
+                Perfil = usuario.Perfil,
                 Token = token
             };
         }
@@ -47,14 +48,14 @@ namespace TCC.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Cadastrar(Usuario usuario)
+        public async Task<IActionResult> CadastrarAsync(Usuario usuario)
         {
-            var resultado = await _usuario.Cadastrar(usuario);
+            var resultado = await _usuario.CadastrarAsync(usuario);
             try
             {
                 if (resultado)
                 {
-                    return StatusCode(HttpStatusCode.Created.GetHashCode());
+                    return Ok(usuario);
                 }
                 else
                 {
@@ -69,11 +70,11 @@ namespace TCC.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public async Task<IActionResult> Buscartodos()
+        public async Task<IActionResult> BuscartodosAsync()
         {
-            var resultado = await _usuario.BuscarTodos();
+            var resultado = await _usuario.BuscarTodosAsync();
             try
             {
                 if(resultado != null)
@@ -92,12 +93,12 @@ namespace TCC.Controllers
             }
         }
 
-        
 
-        [HttpGet("{email}")]
-        public async Task<IActionResult> PegarPeloEmail(string email)
+        [Authorize(Roles = "Admin")]
+        [HttpGet("email/{email}")]
+        public async Task<IActionResult> PegarPeloEmailAsync(string email)
         {
-            var resultado = await _usuario.PegarPeloEmail(email);
+            var resultado = await _usuario.PegarPeloEmailAsync(email);
             try
             {
                 if (resultado != null)
@@ -118,11 +119,11 @@ namespace TCC.Controllers
         }
 
 
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Alterar([Required][FromBody] Usuario usuario)
+        [Authorize(Roles = "Admin")]
+        [HttpPut("id/{id}")]
+        public async Task<IActionResult> AlterarAsync([Required][FromBody] Usuario usuario)
         {
-            var resultado = await _usuario.Alterar(usuario);
+            var resultado = await _usuario.AlterarAsync(usuario);
 
             try
             {
@@ -141,8 +142,55 @@ namespace TCC.Controllers
             }
            
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("rm/{rm}")]
+        public async Task<IActionResult> PegarPeloRMAsync(int rm)
+        {
+            var resultado = await _usuario.PegarPeloRMAsync(rm);
+            try
+            {
+                if (resultado != null)
+                {
+                    return Ok(resultado);
+                }
+
+                else
+                {
+                    return BadRequest("Insira um email valido");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+            }
+            throw new NotImplementedException();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("nome/{nome}")]
+        public async Task<IActionResult> PegarPeloNomeAsync(string nome)
+        {
+            var resultado = await _usuario.PegarPeloNomeAsync(nome);
+        try
+            {
+                if (resultado != null)
+                {
+                    return Ok(resultado);
+                }
+
+                else
+                {
+                    return BadRequest("Insira um email valido");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+            }
+            throw new NotImplementedException();
+        }
     }
-   
 }
 
 

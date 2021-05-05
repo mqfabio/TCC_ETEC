@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
+using TCC.Interfaces;
 using TCC.Models;
 
 
@@ -47,10 +48,11 @@ namespace TCC.Controllers
         }
 
 
-        //[HttpGet("{idUsuario}/{idEvento}")]
-        public async Task<IActionResult> BuscarPeloUsuario(int idUsuario, int idEvento)
+        [Authorize(Roles = "Admin")]
+        [HttpGet("{idUsuario}/{idEvento}")]
+        public async Task<IActionResult> BuscarPeloUsuarioAsync(int idUsuario, int idEvento)
         {
-            var resultado = await _participante_Evento.BuscarPeloUsuario(idUsuario, idEvento);
+            var resultado = await _participante_Evento.BuscarPeloUsuarioAsync(idUsuario, idEvento);
             try
             {
                 if (resultado != null)
@@ -64,10 +66,12 @@ namespace TCC.Controllers
             }
         }
 
-        [HttpDelete("{idUsuario}/{idEvento}")]
-        public async Task<IActionResult> Deletar(int idUsuario, int idEvento)
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{idUsuario}/{idEvento}/Excluir")]
+        public async Task<IActionResult> DeletarAsync(int idUsuario, int idEvento)
         {
-            var resultado = await _participante_Evento.Deletar(idUsuario, idEvento);
+            var resultado = await _participante_Evento.DeletarAsync(idUsuario, idEvento);
             try
             {
                 if (resultado)
