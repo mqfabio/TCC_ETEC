@@ -17,7 +17,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
                     var query = @"select  idRequisicao, idUsuario, dataRequisicao, assunto, descricao, pathanexodocumento, 
                                 statusRequisicao, situacao, motivo, titulacao from requisicao";
@@ -36,7 +36,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
                     var query = @"INSERT INTO [dbo].[requisicao]
                                 (idUsuario, dataRequisicao, assunto, descricao, pathanexodocumento, 
@@ -64,8 +64,8 @@ namespace TCC.Data
             var user = usuario.PegarPeloEmailAsync(email);
             var idUsuario = user.Id;
             try
-            {                           //Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True;
-                using (var conexao = new SqlConnection(somee))
+            {                           
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
                    
                     var query = @"select  idRequisicao, idUsuario, dataRequisicao, assunto, descricao, pathanexodocumento, 

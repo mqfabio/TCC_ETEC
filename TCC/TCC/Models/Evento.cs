@@ -14,7 +14,8 @@ namespace TCC.Models
         public string Descricao { get; set; }
         public DateTime DataEvento { get; set; }
         public StatusEventoEnum StatusEvento { get; set; }
-        
+        public List<int> Participantes { get; set; }
+
 
 
 
@@ -72,7 +73,7 @@ namespace TCC.Models
             return resultado;
         }
 
-        public async Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(string nomeEvento, DateTime dataInicio, DateTime datafim)
+        public async Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(string nomeEvento, DateTime? dataInicio, DateTime? datafim)
         {
             var resultado = await _eventoRepositorio.BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(nomeEvento, dataInicio, datafim);
             return resultado;

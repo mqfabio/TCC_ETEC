@@ -13,7 +13,7 @@ namespace TCC.Interfaces
         Task<bool> ExcluirAsync(int idEvento);
         Task<Evento> PegarPeloNomeAsync(string nome);
         Task<IEnumerable<Evento>> BuscarTodosAsync();
-        Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(string nomeEvento, DateTime dataInicio, DateTime datafim);
+        Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(string nomeEvento, DateTime? dataInicio, DateTime? datafim);
         Task<IEnumerable<Evento>> BuscarPeloRmAsync(int rm);
         Task<IEnumerable<Evento>> BuscarPorNomeOuData(DateTime dataInicio, DateTime dataFim);
 

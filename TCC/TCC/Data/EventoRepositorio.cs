@@ -13,16 +13,15 @@ namespace TCC.Data
 {
     public class EventoRepositorio : IEventoRepositorio
     {
-
         string local = "Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True";
         string somee = "workstation id=TccEtec.mssql.somee.com;packet size = 4096; user id = Giselle_SQLLogin_1; pwd=a7autn81ou;data source = TccEtec.mssql.somee.com; persist security info=False;initial catalog = TccEtec";
-        
-        
+
+
         public async Task<bool> CadastrarAsync(Evento evento)
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
                     var query = @"INSERT INTO [dbo].[evento]
                                 ( nome ,descricao ,dataEvento, statusEvento)
@@ -43,7 +42,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
                     var query = @"UPDATE [dbo].[evento] set
                                         nome = @nome ,
@@ -66,7 +65,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
                     var param = new { id = id };
 
@@ -88,7 +87,7 @@ namespace TCC.Data
         {
             try
             {                         
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
                     var query = @"select  idEvento, nome, descricao, dataEvento, statusEvento from evento Where Nome = @nome";
 
@@ -105,12 +104,11 @@ namespace TCC.Data
             }
         }
 
-
         public async Task<IEnumerable<Evento>> BuscarPelaDataAsync(DateTime dataInicio, DateTime dataFim)
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
                     var query = @"select  idEvento, nome, descricao, dataEvento, statusEvento from evento Where  format(DataEvento,'yyyy-MM-dd')  
                                                                       between format(@dataInicio,'yyyy-MM-dd') and format(@dataFim,'yyyy-MM-dd')";
@@ -128,12 +126,11 @@ namespace TCC.Data
             }
         }
 
-
         public async Task<IEnumerable<Evento>> BuscarTodosAsync()
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
                     var query = @"select  idEvento, nome, descricao, dataEvento, statusEvento from evento";
                     var resultado = await conexao.QueryAsync<Evento>(query);
@@ -147,11 +144,14 @@ namespace TCC.Data
             }
         }
 
-        public async Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(string nomeEvento, DateTime dataInicio, DateTime datafim)
+        public async Task<List<EventoComUsuariosParticipantes>> BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(string nomeEvento, 
+                                                                                                                DateTime? dataInicio, 
+                                                                                                                DateTime? datafim)
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                     {
                     var param = new { nomeEvento = nomeEvento, dataInicio = dataInicio, datafim = datafim};
                     var query = @"select 
@@ -169,11 +169,12 @@ namespace TCC.Data
                                         usuario u ON p.idusuario = u.idusuario
                                 WHERE e.nome  = @nomeEvento or format(DataEvento,'yyyy-MM-dd')  
                                                                       between format(@dataInicio,'yyyy-MM-dd') and format(@datafim,'yyyy-MM-dd')
-                                                                      and u.Perfil = 1";
+                                                                      and u.Perfil = 0";
                     var resultado = await conexao.QueryAsync<EventoDoUsuarioDTO>(query, param);
 
                     var listaRetorno = new List<EventoComUsuariosParticipantes>();
                     var resultadoAgrupadoPorCurso = resultado.GroupBy(x => x.IdEvento).OrderBy(x => x.Key).ToList();
+                    Console.WriteLine("entrou");
                     resultadoAgrupadoPorCurso.ForEach((Action<IGrouping<int, EventoDoUsuarioDTO>>)(evento =>
                     {
                         listaRetorno.Add(new EventoComUsuariosParticipantes
@@ -198,12 +199,11 @@ namespace TCC.Data
             }
         }
 
-
         public async Task<IEnumerable<Evento>> BuscarPeloRmAsync(int rm)
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
                     var param = new { rm = rm };
                     var query = @"select 

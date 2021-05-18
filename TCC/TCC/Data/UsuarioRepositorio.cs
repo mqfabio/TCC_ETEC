@@ -12,16 +12,13 @@ namespace TCC.Data
 {
     public class UsuarioRepositorio : IUsuarioRepositorio
     {
-        string local = "Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True";
-        string somee = "workstation id=TccEtec.mssql.somee.com;packet size = 4096; user id = Giselle_SQLLogin_1; pwd=a7autn81ou;data source = TccEtec.mssql.somee.com; persist security info=False;initial catalog = TccEtec";
 
-     
         public async Task<Usuario> BuscarPorEmailAsync(string email)
         {
            
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.LocalConnectString))
                 {
                     var query = @"select  
                                         idUsuario, 
@@ -59,32 +56,9 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.LocalConnectString))
                 {
                     var resultado2 = await BuscarPorEmailAsync(email);
-                    //var query = @"select  
-                    //                    idUsuario, 
-                    //                    senha, 
-                    //                    codUE, 
-                    //                    RM, 
-                    //                    CPF, 
-                    //                    RG, 
-                    //                    dataNascimento, 
-                    //                    nomeUsuario, 
-                    //                    email, 
-                    //                    statusUsuario, 
-                    //                    perfil, 
-                    //                    titulacao, 
-                    //                    cargo 
-                    //            from 
-                    //                    usuario 
-                    //            Where senha = @senha and email = @email and statusUsuario = 0 ";
-
-                    //var param = new { email = email};
-                    //conexao.Open();
-                    //var resultado = await conexao.QueryAsync<Usuario>(query, param);
-
-                    //var resultado2 = resultado.FirstOrDefault();
 
                     bool senhaValida = BCrypt.Net.BCrypt.Verify(senha, resultado2.Senha);
 
@@ -105,7 +79,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.LocalConnectString))
                 {
                     var query = @"INSERT INTO [dbo].[usuario]
                                 ( senha, codUE, RM, CPF, RG, dataNascimento, nomeUsuario, email, statusUsuario, perfil, titulacao, cargo)
@@ -138,7 +112,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.LocalConnectString))
                 {
                     var query = @"select  IdUsuario, Senha, CodUE, RM, CPF, RG, DataNascimento, NomeUsuario, Email, Cargo, 
                                           StatusUsuario, Perfil from usuario";
@@ -158,7 +132,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.LocalConnectString))
                 {
                     var query = @"UPDATE [dbo].[usuario] set
                                 senha = @senha, 
@@ -193,7 +167,7 @@ namespace TCC.Data
 
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.LocalConnectString))
                 {
                     var query = @"select  
                                         idUsuario, 
@@ -232,7 +206,7 @@ namespace TCC.Data
 
             try
             {
-                using (var conexao = new SqlConnection(local))
+                using (var conexao = new SqlConnection(Configuracao.LocalConnectString))
                 {
                     var query = @"select  
                                         idUsuario, 
@@ -258,6 +232,71 @@ namespace TCC.Data
 
                     return resultado.FirstOrDefault();
 
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public async Task<IEnumerable<Usuario>> BuscarPorRMOuNomeAsync(int rm, string nomeUsuario)
+        {
+
+            try
+            {
+                using (var conexao = new SqlConnection(Configuracao.LocalConnectString))
+                {
+                    var query = "";
+                    nomeUsuario = nomeUsuario + "%";
+
+                    if (rm != 0 && nomeUsuario != null)
+                    {
+                         query = @"select  
+                                        idUsuario, 
+                                        senha, 
+                                        codUE, 
+                                        RM, 
+                                        CPF, 
+                                        RG, 
+                                        dataNascimento, 
+                                        nomeUsuario, 
+                                        email, 
+                                        statusUsuario, 
+                                        perfil, 
+                                        titulacao, 
+                                        cargo 
+                                from 
+                                    usuario 
+                                Where RM = @rm and nomeUsuario LIKE @nomeUsuario and statusUsuario = 0 ";
+
+                    }
+                    else
+                    query = @"select  
+                                        idUsuario, 
+                                        senha, 
+                                        codUE, 
+                                        RM, 
+                                        CPF, 
+                                        RG, 
+                                        dataNascimento, 
+                                        nomeUsuario, 
+                                        email, 
+                                        statusUsuario, 
+                                        perfil, 
+                                        titulacao, 
+                                        cargo 
+                                from 
+                                    usuario 
+                                Where RM = @rm or nomeUsuario LIKE @nomeUsuario and statusUsuario = 0 ";
+
+                   
+
+                    var param = new { RM = rm, nomeUsuario = nomeUsuario };
+                    conexao.Open();
+                    var resultado = await conexao.QueryAsync<Usuario>(query, param);
+
+                    return resultado;
                 }
             }
             catch (Exception e)

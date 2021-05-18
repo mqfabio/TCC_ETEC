@@ -17,5 +17,6 @@ namespace TCC.Interfaces
         Task<Usuario> PegarPeloEmailAsync(string email);
         Task<Usuario> PegarPeloRMAsync(int rm);
         Task<Usuario> PegarPeloNomeAsync(string nome);
+        Task<IEnumerable<Usuario>> PegarPeloRMOuNomeAsync(int rm, string nomeUsuario);
     }
 }

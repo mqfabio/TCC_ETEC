@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
 using TCC.DTO;
+using TCC.Enums;
 using TCC.Interfaces;
 using TCC.Models;
 using TCC.Services;
@@ -22,7 +23,7 @@ namespace TCC.Controllers
             _usuario = usuario;
         }
 
-       
+
 
         [HttpPost]
         [Route("login")]
@@ -31,9 +32,9 @@ namespace TCC.Controllers
         {
             var usuario = await _usuario.PegarPeloEmailSenhaAsync(model.Email, model.Senha);
 
-            if(usuario == null)
+            if (usuario == null)
                 return BadRequest("Usuário ou senha inválidos");
-            
+
             var token = TokenService.GenerateToken(usuario);
             usuario.Senha = "";
             return new LoginDoUsuarioDTO
@@ -50,34 +51,42 @@ namespace TCC.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CadastrarAsync(Usuario usuario)
         {
+            var validar = await _usuario.PegarPeloRMAsync(usuario.RM);
+
+            if(validar != null)            
+                return BadRequest("Não pode cadastrar outro usuário com RM ja cadastrado.");
+            else if(!Enum.IsDefined(typeof(PerfilEnum), usuario.Perfil))
+                return BadRequest("Perfil de usuário inválido.");
+
             var resultado = await _usuario.CadastrarAsync(usuario);
-            try
             {
-                if (resultado)
+                try
                 {
-                    return Ok(usuario);
+                    if (resultado)
+                    {
+                        return Ok(usuario);
+                    }
+                    else
+                    {
+                        return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Usuario existente!");
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Usuario existente!");
+                    return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro inesperado. Entre em contato com o administrador.");
                 }
+                throw new NotImplementedException();
             }
-            catch (Exception e)
-            {
-                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode(), "Erro inesperado. Entre em contato com o administrador.");
-            }
-            throw new NotImplementedException();
         }
 
-
-        [Authorize(Roles = "Admin")]
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> BuscartodosAsync()
         {
             var resultado = await _usuario.BuscarTodosAsync();
             try
             {
-                if(resultado != null)
+                if (resultado != null)
                 {
                     return Ok(resultado);
                 }
@@ -140,7 +149,7 @@ namespace TCC.Controllers
             {
                 throw new NotImplementedException();
             }
-           
+
         }
 
         [Authorize(Roles = "Admin")]
@@ -172,7 +181,7 @@ namespace TCC.Controllers
         public async Task<IActionResult> PegarPeloNomeAsync(string nome)
         {
             var resultado = await _usuario.PegarPeloNomeAsync(nome);
-        try
+            try
             {
                 if (resultado != null)
                 {
@@ -190,7 +199,33 @@ namespace TCC.Controllers
             }
             throw new NotImplementedException();
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("busca")]
+        public async Task<IActionResult> PegarPeloRMOuNomeAsync(int rm, string nome)
+        {
+            var resultado = await _usuario.PegarPeloRMOuNomeAsync(rm, nome);
+            try
+            {
+                if (resultado != null)
+                {
+                    return Ok(resultado);
+                }
+
+                else
+                {
+                    return BadRequest("Usuario não encontrado");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(HttpStatusCode.InternalServerError.GetHashCode());
+            }
+            throw new NotImplementedException();
+        }
+
     }
 }
+
 
 

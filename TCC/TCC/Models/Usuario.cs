@@ -91,5 +91,11 @@ namespace TCC.Models
             return resultado;
         }
 
+        public async Task<IEnumerable<Usuario>> PegarPeloRMOuNomeAsync(int rm, string nomeUsuario)
+        {
+            var resultado = await _usuarioRepositorio.BuscarPorRMOuNomeAsync (rm, nomeUsuario);
+            return resultado;
+        }
+
     }
 }

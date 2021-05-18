@@ -144,9 +144,10 @@ namespace TCC.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("{nomeEvento}/{dataInicio:DateTime}/{datafim}")]
-        public async Task<ActionResult<List<Evento>>> BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(string nomeEvento, DateTime dataInicio, DateTime datafim)
+        [HttpGet("busca")]
+        public async Task<ActionResult<List<Evento>>> BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(string nomeEvento, DateTime? dataInicio, DateTime? datafim)
         {
+            
             var resultado = await _evento.BuscarEventosPeloNomeouDataTrazendoUsuarioAsync(nomeEvento, dataInicio, datafim);
             try
             {

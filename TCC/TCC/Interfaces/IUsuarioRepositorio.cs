@@ -16,5 +16,6 @@ namespace TCC.Interfaces
         Task<Usuario> BuscarPorEmailAsync(string email);
         Task<Usuario> BuscarPorRMAsync(int rm);
         Task<Usuario> BuscarPeloNomeAsync(string nome);
+        Task<IEnumerable<Usuario>> BuscarPorRMOuNomeAsync(int rm, string nomeUsuario);
     }
 }

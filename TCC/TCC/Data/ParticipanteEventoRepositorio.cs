@@ -12,14 +12,12 @@ namespace TCC.Data
 {
     public class ParticipanteEventoRepositorio : IParticipanteEventoRepositorio
     {
-        string local = "Server=DESKTOP-6IG361V;Database=TCC_ETC;Trusted_Connection=True";
-        string somee = "workstation id=TccEtec.mssql.somee.com;packet size = 4096; user id = Giselle_SQLLogin_1; pwd=a7autn81ou;data source = TccEtec.mssql.somee.com; persist security info=False;initial catalog = TccEtec";
-
+       
         public async Task<bool> CadastrarAsync(Participante_evento pe)
         {
             try
             {
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
                     var query = @"INSERT INTO [dbo].[participante_evento]
                             (idEvento, idUsuario)
@@ -53,7 +51,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
                     var query = @"SELECT idUsuario, idEvento from participante_evento WHERE idUsuario = @idUsuario and idEvento = @idEvento";
 
@@ -77,7 +75,7 @@ namespace TCC.Data
         {
             try
             {
-                using (var conexao = new SqlConnection(somee))
+                using (var conexao = new SqlConnection(Configuracao.SomeeConnectString))
                 {
 
                     var param = new { idUsuario = idUsuario, idEvento = idEvento };
